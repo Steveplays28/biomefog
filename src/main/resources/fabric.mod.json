@@ -3,7 +3,7 @@
   "id": "biome-fog",
   "version": "${version}",
   "name": "Biome Fog",
-  "description": "Adds more fog to dense biomes like jungles.",
+  "description": "Adds fog that changes color depending on the biome you're in.",
   "authors": [
     "Steveplays28"
   ],
