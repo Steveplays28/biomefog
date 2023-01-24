@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "biome-fog",
+  "version": "${version}",
+  "name": "Biome Fog",
+  "description": "Adds more fog to dense biomes like jungles.",
+  "authors": [
+    "Steveplays28"
+  ],
+  "contact": {},
+  "license": "LGPL-3.0",
+  "icon": "assets/biome-fog/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.steveplays28.biomefog.client.BiomeFogClient"
+    ]
+  },
+  "mixins": [
+    "biome-fog.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric": "*",
+    "minecraft": "1.19.x"
+  }
+}
