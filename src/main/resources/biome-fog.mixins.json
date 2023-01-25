@@ -6,7 +6,9 @@
   "mixins": [
   ],
   "client": [
-    "BackgroundRendererMixin"
+    "BackgroundRendererMixin",
+    "DimensionEffectsOverworldMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

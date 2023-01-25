@@ -1,6 +1,7 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -37,6 +38,13 @@ public class BackgroundRendererMixin {
 			RenderSystem.setShaderFogStart(0f);
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
 			RenderSystem.setShaderFogColor(0.28f, 0.28f, 0.05f, 1f);
+			BiomeFogClient.fogColor = new float[]{0.28f, 0.28f, 0.05f, 1f};
 		}
+	}
+
+	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
+	private static void setFogBlackInject(CallbackInfo ci) {
+		RenderSystem.setShaderFogColor(0.75f, 0.75f, 1f, 0.5f);
+		ci.cancel();
 	}
 }
