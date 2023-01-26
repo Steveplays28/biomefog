@@ -91,10 +91,26 @@ publishing {
 loom {
     runs {
         clientOptimised {
-            name "Client Extended Compat Optimised"
+            name "Client Optimised"
 
             dependencies {
+                modRuntimeOnly "maven.modrinth:modmenu:eIrlBn1Z"
                 modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+            }
+
+            client()
+        }
+
+        clientOptimisedSodium {
+            name "Client Optimized Sodium"
+
+            dependencies {
+                modRuntimeOnly "maven.modrinth:modmenu:eIrlBn1Z"
+                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
+                modRuntimeOnly "maven.modrinth:sodium:oYfJQ6lR"
+                modRuntimeOnly "maven.modrinth:reeses-sodium-options:hkSQ9RqT"
+                modRuntimeOnly "maven.modrinth:lithium:XS6vJwop"
+                modRuntimeOnly "maven.modrinth:ferrite-core:GHcKib6J"
             }
 
             client()

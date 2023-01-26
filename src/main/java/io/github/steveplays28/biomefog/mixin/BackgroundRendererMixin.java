@@ -39,9 +39,12 @@ public class BackgroundRendererMixin {
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
 			RenderSystem.setShaderFogColor(0.28f, 0.28f, 0.05f, 1f);
 			BiomeFogClient.fogColor = new float[]{0.28f, 0.28f, 0.05f, 1f};
+		} else {
+//			BiomeFogClient.fogColor = new float[]{0f, 0f, 0f, 1f};
 		}
 	}
 
+	// Removes fog from clouds (makes clouds visible)
 	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
 	private static void setFogBlackInject(CallbackInfo ci) {
 		RenderSystem.setShaderFogColor(0.75f, 0.75f, 1f, 0.5f);
