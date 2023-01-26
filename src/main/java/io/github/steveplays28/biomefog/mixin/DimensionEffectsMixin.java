@@ -12,6 +12,8 @@ public class DimensionEffectsMixin {
 	// Changes sunrise/sunset fog color override (fog around the sun)
 	@Inject(method = "getFogColorOverride", at = @At("RETURN"), cancellable = true)
 	public void getFogColorOverrideInject(float skyAngle, float tickDelta, CallbackInfoReturnable<float[]> cir) {
+		// TODO: Figure out if this changes anything at all, and if it does, what it changes
+		cir.setReturnValue(null);
 //		cir.setReturnValue(BiomeFogClient.fogColor);
 	}
 }
