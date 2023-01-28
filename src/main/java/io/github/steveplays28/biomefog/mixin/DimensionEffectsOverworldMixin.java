@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DimensionEffects.Overworld.class)
 public class DimensionEffectsOverworldMixin {
-	// Changes sky horizon color
+	// Changes sky horizon color (clear color)
 	@Inject(method = "adjustFogColor", at = @At("RETURN"), cancellable = true)
 	public void adjustFogColor(Vec3d color, float sunHeight, CallbackInfoReturnable<Vec3d> cir) {
 		cir.setReturnValue(new Vec3d(BiomeFogClient.fogColor[0], BiomeFogClient.fogColor[1], BiomeFogClient.fogColor[2]));
