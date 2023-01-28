@@ -45,9 +45,9 @@ public class BackgroundRendererMixin {
 	}
 
 	// Removes fog from clouds (makes clouds visible)
-	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
-	private static void setFogBlackInject(CallbackInfo ci) {
-		RenderSystem.setShaderFogColor(0.75f, 0.75f, 1f, 0.5f);
-		ci.cancel();
-	}
+//	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
+//	private static void setFogBlackInject(CallbackInfo ci) {
+//		RenderSystem.setShaderFogColor(0.67f, 0.8f, 0.95f, 1f);
+//		ci.cancel();
+//	}
 }

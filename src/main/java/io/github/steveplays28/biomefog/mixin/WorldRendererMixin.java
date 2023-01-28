@@ -27,7 +27,7 @@ public class WorldRendererMixin {
 	public Vec3d renderSky(Vec3d original) {
 		// TODO: Figure out if enableBlend() is needed
 		RenderSystem.enableBlend();
-		return new Vec3d(0.28f, 0.28f, 0.05f);
+		return new Vec3d(0f, 0f, 1f);
 //		return new Vec3d(1f, 0f, 0f);
 	}
 
@@ -42,6 +42,7 @@ public class WorldRendererMixin {
 //		ci.cancel();
 //	}
 
+	// The lower the multiplier is the more sky that appears to render with my custom color (from the renderSky @ModifyVariable above) at the top of the skybox :o
 	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/render/BufferBuilder;F)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;signum(F)F"))
 	private static float renderSkyBufferBuilderInject(float g) {
 		return Math.signum(16.0f) * 128.0f;
