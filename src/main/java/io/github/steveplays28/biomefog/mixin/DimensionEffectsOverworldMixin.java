@@ -14,7 +14,7 @@ public class DimensionEffectsOverworldMixin {
 	// Changes sky horizon color (clear color)
 	@Inject(method = "adjustFogColor", at = @At("RETURN"), cancellable = true)
 	public void adjustFogColor(Vec3d color, float sunHeight, CallbackInfoReturnable<Vec3d> cir) {
-		cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).subtract(0.05f, 0.05f, 0.05f));
+		cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).subtract(0.03f, 0.03f, 0.03f));
 
 //		cir.setReturnValue(new Vec3d(1f, 0f, 0f));
 	}
