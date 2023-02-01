@@ -1,7 +1,7 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.steveplays28.biomefog.RenderSystemUtil;
+import io.github.steveplays28.biomefog.util.RenderSystemUtil;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;

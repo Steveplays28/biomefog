@@ -1,4 +1,4 @@
-package io.github.steveplays28.biomefog;
+package io.github.steveplays28.biomefog.util;
 
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;

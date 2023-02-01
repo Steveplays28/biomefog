@@ -1,4 +1,4 @@
-package io.github.steveplays28.biomefog;
+package io.github.steveplays28.biomefog.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.joml.Vector4f;

@@ -1,6 +1,6 @@
 package io.github.steveplays28.biomefog.mixin;
 
-import io.github.steveplays28.biomefog.Vec3dUtil;
+import io.github.steveplays28.biomefog.util.Vec3dUtil;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.util.math.Vec3d;
