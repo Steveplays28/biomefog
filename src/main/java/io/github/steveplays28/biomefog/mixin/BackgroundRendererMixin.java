@@ -1,7 +1,8 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.steveplays28.biomefog.client.BiomeFogClient;
+import io.github.steveplays28.biomefog.RenderSystemUtil;
+import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -9,6 +10,7 @@ import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,22 +27,29 @@ public class BackgroundRendererMixin {
 		if (MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("jungle")))) {
 			RenderSystem.setShaderFogStart(0f);
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
-			RenderSystem.setShaderFogColor(0.15f, 0.42f, 0.13f, 1f);
+
+			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColorJungle;
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 		} else if (MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("desert")))) {
 			RenderSystem.setShaderFogStart(0f);
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
-			RenderSystem.setShaderFogColor(0.84f, 0.78f, 0.6f, 1f);
+
+			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColorDesert;
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 		} else if (MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("snowy_plains"))) || MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("snowy_taiga"))) || MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("snowy_slopes"))) || MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("snowy_beach")))) {
 			RenderSystem.setShaderFogStart(0f);
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
-			RenderSystem.setShaderFogColor(0.96f, 0.98f, 0.94f, 1f);
+
+			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColorSnow;
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 		} else if (MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("swamp"))) || MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().equals(RegistryKey.of(RegistryKeys.BIOME, new Identifier("mangrove_swamp")))) {
 			RenderSystem.setShaderFogStart(0f);
 			RenderSystem.setShaderFogEnd(viewDistance / 3);
-			RenderSystem.setShaderFogColor(0.28f, 0.28f, 0.05f, 1f);
-			BiomeFogClient.fogColor = new float[]{0.28f, 0.28f, 0.05f, 1f};
+
+			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColorSwamp;
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 		} else {
-//			BiomeFogClient.fogColor = new float[]{0f, 0f, 0f, 1f};
+			BiomeFogConfigLoader.CONFIG.fogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.skyColor.toVector3f(), 1f);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package io.github.steveplays28.biomefog.mixin;
 
+import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
+
 	// The lower the multiplier is the more sky that appears to render with my custom color (from the renderSky @ModifyVariable above) at the top of the skybox :o
 	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/render/BufferBuilder;F)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;signum(F)F"))
 	private static float renderSkyBufferBuilderInject(float g) {
@@ -18,7 +20,7 @@ public class WorldRendererMixin {
 	// The gradient appears to always want to go towards gray/blueish at the horizon in vanilla (fixed by renderSkyBufferBuilderInject below)
 	@ModifyVariable(method = "renderSky*", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/world/ClientWorld;getSkyColor(Lnet/minecraft/util/math/Vec3d;F)Lnet/minecraft/util/math/Vec3d;"))
 	public Vec3d renderSkyInject(Vec3d original) {
-		return new Vec3d(0.68f, 0.83f, 1f);
+		return BiomeFogConfigLoader.CONFIG.skyColor;
 	}
 
 	// Changes clouds color
