@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class WorldRendererMixin {
 
 	// The lower the multiplier is the more sky that appears to render with my custom color (from the renderSky @ModifyVariable above) at the top of the skybox :o
-	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/render/BufferBuilder;F)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;signum(F)F"))
+	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/render/BufferBuilder;F)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;signum(F)F"), argsOnly = true)
 	private static float renderSkyBufferBuilderInject(float g) {
 		return Math.signum(16.0f) * 8.0f;
 	}
