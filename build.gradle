@@ -112,7 +112,7 @@ loom {
                 modRuntimeOnly "maven.modrinth:ferrite-core:GHcKib6J"
             }
 
-            client()
+            clientOptimised()
         }
     }
 }
