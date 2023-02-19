@@ -1,13 +1,13 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.steveplays28.biomefog.client.BiomeFogClient;
-import io.github.steveplays28.biomefog.util.RenderSystemUtil;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
+import io.github.steveplays28.biomefog.util.RenderSystemUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -63,7 +63,10 @@ public class BackgroundRendererMixin {
 			BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
 		}
 
-		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
+		// Re-render light and dark skies to update WorldRendererMixin changes
+		MinecraftClient.getInstance().worldRenderer.renderLightSky();
+		MinecraftClient.getInstance().worldRenderer.renderDarkSky();
+//		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
 	}
 
 	private static float vanillaFogStart(float viewDistance) {

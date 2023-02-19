@@ -118,4 +118,6 @@ loom {
             client()
         }
     }
+
+    accessWidenerPath = file("src/main/resources/biome-fog.accesswidener")
 }
