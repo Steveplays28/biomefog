@@ -29,7 +29,7 @@ public class BiomeFogConfigLoader {
 			var gson = createGson();
 			CONFIG = gson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), BiomeFogConfig.class);
 
-			BiomeFogClient.LOGGER.info("Loaded Forgero configuration, located at: {}", CONFIG_FILE_PATH);
+			BiomeFogClient.LOGGER.info("Loaded Biome Fog configuration, located at: {}", CONFIG_FILE_PATH);
 
 			return CONFIG;
 		} catch (IOException e) {

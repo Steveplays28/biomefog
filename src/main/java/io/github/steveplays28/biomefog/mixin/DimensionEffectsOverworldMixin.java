@@ -1,7 +1,9 @@
 package io.github.steveplays28.biomefog.mixin;
 
-import io.github.steveplays28.biomefog.util.Vec3dUtil;
+import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
+import io.github.steveplays28.biomefog.util.Vec3dUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.DimensionEffects;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,8 +16,13 @@ public class DimensionEffectsOverworldMixin {
 	// Changes sky horizon color (clear color)
 	@Inject(method = "adjustFogColor", at = @At("RETURN"), cancellable = true)
 	public void adjustFogColor(Vec3d color, float sunHeight, CallbackInfoReturnable<Vec3d> cir) {
-		cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).subtract(0.03f, 0.03f, 0.03f));
+		var world = MinecraftClient.getInstance().world;
+		if (world == null) return;
 
-//		cir.setReturnValue(new Vec3d(1f, 0f, 0f));
+		if ((world.isRaining() || world.isThundering()) && BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.containsKey(BiomeFogClient.currentBiome)) {
+			cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).add(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.get(BiomeFogClient.currentBiome))));
+		} else if (BiomeFogConfigLoader.CONFIG.skyColorAdditions.containsKey(BiomeFogClient.currentBiome)) {
+			cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).add(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.skyColorAdditions.get(BiomeFogClient.currentBiome))));
+		}
 	}
 }

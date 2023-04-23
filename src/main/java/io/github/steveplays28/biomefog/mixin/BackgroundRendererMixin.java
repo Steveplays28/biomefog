@@ -1,6 +1,7 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.util.BiomeUtil;
 import io.github.steveplays28.biomefog.util.RenderSystemUtil;
@@ -47,6 +48,8 @@ public class BackgroundRendererMixin {
 		MinecraftClient.getInstance().worldRenderer.renderLightSky();
 		MinecraftClient.getInstance().worldRenderer.renderDarkSky();
 //		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
+
+		BiomeFogClient.currentBiome = MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().getValue().toString();
 	}
 
 	private static float vanillaFogStart(float viewDistance) {
