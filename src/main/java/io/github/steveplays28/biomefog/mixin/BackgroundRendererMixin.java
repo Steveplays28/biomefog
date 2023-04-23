@@ -7,7 +7,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -58,7 +57,7 @@ public class BackgroundRendererMixin {
 			RenderSystem.setShaderFogStart(Math.lerp(vanillaFogStart(viewDistance), 0f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 			RenderSystem.setShaderFogEnd(Math.lerp(viewDistance, viewDistance / 3, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 
-			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(new Vector4f(BiomeFogConfigLoader.CONFIG.skyColor.toVector3f(), 1f), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
+			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(new Vector4f(BiomeFogConfigLoader.CONFIG.skyColor.toVector3f(), 1f), 0.001f);
 			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 			BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
 		}
