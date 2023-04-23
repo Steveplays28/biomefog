@@ -1,6 +1,5 @@
 package io.github.steveplays28.biomefog.mixin;
 
-import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.util.math.Vec3d;
@@ -14,8 +13,6 @@ public class WorldRendererMixin {
 	// The lower the multiplier is the more sky that appears to render with my custom color (from the renderSky @ModifyVariable above) at the top of the skybox :o
 	@ModifyVariable(method = "renderSky(Lnet/minecraft/client/render/BufferBuilder;F)Lnet/minecraft/client/render/BufferBuilder$BuiltBuffer;", at = @At(value = "INVOKE_ASSIGN", target = "Ljava/lang/Math;signum(F)F"), argsOnly = true)
 	private static float renderSkyBufferBuilderInject(float g) {
-//		return Math.signum(16.0f) * 8.0f;
-		BiomeFogClient.LOGGER.info(Math.lerp(Math.signum(16.0f) * 512.0f, Math.signum(16.0f) * 8.0f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 		return Math.lerp(Math.signum(16.0f) * 512.0f, Math.signum(16.0f) * 8.0f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
 	}
 

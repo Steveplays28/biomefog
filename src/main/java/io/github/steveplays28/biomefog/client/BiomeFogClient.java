@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 @Environment(EnvType.CLIENT)
 public class BiomeFogClient implements ClientModInitializer {
-	private static final String MOD_ID = "biome-fog";
+	public static final String MOD_ID = "biome-fog";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	@Override
