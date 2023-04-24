@@ -1,6 +1,5 @@
 package io.github.steveplays28.biomefog.mixin;
 
-import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.util.Vec3dUtil;
 import net.minecraft.client.MinecraftClient;
@@ -19,10 +18,6 @@ public class DimensionEffectsOverworldMixin {
 		var world = MinecraftClient.getInstance().world;
 		if (world == null) return;
 
-		if ((world.isRaining() || world.isThundering()) && BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.containsKey(BiomeFogClient.currentBiome)) {
-			cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).add(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.get(BiomeFogClient.currentBiome))));
-		} else if (BiomeFogConfigLoader.CONFIG.skyColorAdditions.containsKey(BiomeFogClient.currentBiome)) {
-			cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor).add(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.skyColorAdditions.get(BiomeFogClient.currentBiome))));
-		}
+		cir.setReturnValue(Vec3dUtil.vector4fToVec3d(BiomeFogConfigLoader.CONFIG.fogColor));
 	}
 }

@@ -21,16 +21,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BackgroundRendererMixin {
 	@Inject(method = "applyFog", at = @At("TAIL"))
 	private static void applyFogInject(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
-		if (MinecraftClient.getInstance().world == null || MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().isEmpty() || !camera.getSubmersionType().equals(CameraSubmersionType.NONE)) {
+		var world = MinecraftClient.getInstance().world;
+		if (world == null || world.getBiome(camera.getBlockPos()).getKey().isEmpty() || !camera.getSubmersionType().equals(CameraSubmersionType.NONE)) {
 			return;
 		}
 
-		if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeUtil.GetBiomeBelowCamera(camera).toString())) {
+		// Get current biome (at the camera's position)
+		BiomeFogClient.currentBiome = BiomeUtil.GetBiomeBelowCamera(camera).toString();
+
+		if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
 			// Set custom fog and sky color
 			RenderSystem.setShaderFogStart(Math.lerp(vanillaFogStart(viewDistance), 0f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 			RenderSystem.setShaderFogEnd(Math.lerp(viewDistance, viewDistance / 3, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 
-			var currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeUtil.GetBiomeBelowCamera(camera).toString());
+			var currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentBiome);
+			if (world.isRaining() || world.isThundering()) {
+				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentBiome);
+			}
+
 			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(currentBiomeFogColor, 0.001f);
 			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
 			BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime + tickDelta * 0.001f);
@@ -48,8 +56,6 @@ public class BackgroundRendererMixin {
 		MinecraftClient.getInstance().worldRenderer.renderLightSky();
 		MinecraftClient.getInstance().worldRenderer.renderDarkSky();
 //		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
-
-		BiomeFogClient.currentBiome = MinecraftClient.getInstance().world.getBiome(camera.getBlockPos()).getKey().get().getValue().toString();
 	}
 
 	private static float vanillaFogStart(float viewDistance) {
