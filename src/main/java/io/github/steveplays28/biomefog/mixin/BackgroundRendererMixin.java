@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Math;
 import org.joml.Vector4f;
@@ -82,10 +83,17 @@ public abstract class BackgroundRendererMixin {
 		return -1f;
 	}
 
-//	@Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
-//	private static void renderInject(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
-//		RenderSystem.clearColor((float) BiomeFogConfigLoader.CONFIG.skyColor.x, (float) BiomeFogConfigLoader.CONFIG.skyColor.y, (float) BiomeFogConfigLoader.CONFIG.skyColor.z, 1f);
-//		clearFog();
-//		ci.cancel();
-//	}
+	@Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
+	private static void renderInject(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
+		RenderSystem.clearColor(0f, 1f, 0f, 1f);
+		clearFog();
+		ci.cancel();
+	}
+
+	// Don't do this, this changes the color of the seam/transition in the sky
+	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
+	private static void setFogBlackInject(CallbackInfo ci) {
+		RenderSystem.setShaderFogColor(0f, 1f, 0f, 1f);
+		ci.cancel();
+	}
 }
