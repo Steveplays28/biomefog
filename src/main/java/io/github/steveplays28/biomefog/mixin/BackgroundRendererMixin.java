@@ -33,13 +33,21 @@ public abstract class BackgroundRendererMixin {
 
 		if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
 			// Set custom fog and sky color
-			RenderSystem.setShaderFogStart(Math.lerp(vanillaFogStart(viewDistance), 0f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
-			RenderSystem.setShaderFogEnd(Math.lerp(viewDistance, viewDistance / 3, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
-
+			var fogStartAddition = 0f;
+			var fogEndAddition = 0f;
 			var currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentBiome);
+
 			if (world.isRaining() || world.isThundering()) {
+				fogStartAddition = BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f);
+				fogEndAddition = BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f);
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentBiome);
+			} else {
+				fogStartAddition = BiomeFogConfigLoader.CONFIG.fogStartAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f);
+				fogEndAddition = BiomeFogConfigLoader.CONFIG.fogEndAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f);
 			}
+
+			RenderSystem.setShaderFogStart(Math.lerp(vanillaFogStart(viewDistance), 0f + fogStartAddition, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
+			RenderSystem.setShaderFogEnd(Math.lerp(viewDistance, viewDistance / 3 + fogEndAddition, BiomeFogConfigLoader.CONFIG.fogColorLerpTime));
 
 			BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(currentBiomeFogColor, 0.001f);
 			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
