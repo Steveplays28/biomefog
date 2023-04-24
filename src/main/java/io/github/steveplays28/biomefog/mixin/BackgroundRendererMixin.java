@@ -69,17 +69,22 @@ public abstract class BackgroundRendererMixin {
 	public static void clearFog() {
 	}
 
+	// Changes the color of bottom part of the sky
 	@Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
 	private static void renderInject(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
-		RenderSystem.clearColor(0f, 1f, 0f, 1f);
+		var fogColor = BiomeFogConfigLoader.CONFIG.fogColor;
+
+		RenderSystem.clearColor(fogColor.x, fogColor.y, fogColor.z, fogColor.w);
 		clearFog();
 		ci.cancel();
 	}
 
-	// Don't do this, this changes the color of the seam/transition in the sky
+	// Changes the color of the seam/transition in the sky
 	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
 	private static void setFogBlackInject(CallbackInfo ci) {
-		RenderSystem.setShaderFogColor(0f, 1f, 0f, 1f);
+		var fogColor = BiomeFogConfigLoader.CONFIG.fogColor;
+
+		RenderSystem.setShaderFogColor(fogColor.x, fogColor.y, fogColor.z, fogColor.w);
 		ci.cancel();
 	}
 }
