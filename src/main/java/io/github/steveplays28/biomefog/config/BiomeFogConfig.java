@@ -132,4 +132,6 @@ public class BiomeFogConfig {
 
 	public transient Vector4f fogColor = new Vector4f(this.skyColor.toVector3f(), 1f);
 	public transient float fogColorLerpTime;
+	public transient float fogStartAddition = 0f;
+	public transient float fogEndAddition = 0f;
 }
