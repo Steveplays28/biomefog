@@ -5,6 +5,7 @@ import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.util.BiomeUtil;
 import io.github.steveplays28.biomefog.util.RenderSystemUtil;
+import io.github.steveplays28.biomefog.util.TimeUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -39,6 +40,10 @@ public abstract class BackgroundRendererMixin {
 				BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
 				BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.getOrDefault(BiomeFogClient.currentBiome, new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorRain.toVector3f(), 1f));
+			} else if (TimeUtil.isNight(world)) {
+				BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
+				BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
+				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsNight.getOrDefault(BiomeFogClient.currentBiome, new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorNight.toVector3f(), 1f));
 			} else {
 				BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
 				BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
@@ -53,6 +58,8 @@ public abstract class BackgroundRendererMixin {
 
 			if (world.isRaining() || world.isThundering()) {
 				BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorRain.toVector3f(), 1f), 0.001f);
+			} else if (TimeUtil.isNight(world)) {
+				BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorNight.toVector3f(), 1f), 0.001f);
 			} else {
 				BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(new Vector4f(BiomeFogConfigLoader.CONFIG.skyColor.toVector3f(), 1f), 0.001f);
 			}
@@ -68,6 +75,8 @@ public abstract class BackgroundRendererMixin {
 		// Re-render light and dark skies to update WorldRendererMixin changes
 		MinecraftClient.getInstance().worldRenderer.renderLightSky();
 		MinecraftClient.getInstance().worldRenderer.renderDarkSky();
+
+		BiomeFogClient.LOGGER.info(TimeUtil.isNight(world));
 
 //		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
 //		BiomeFogClient.LOGGER.info("fogStartAddition: {}\nfogEndAddition: {}", BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogEndAddition);

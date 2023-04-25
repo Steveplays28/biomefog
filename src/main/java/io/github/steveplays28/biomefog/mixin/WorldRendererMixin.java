@@ -2,6 +2,7 @@ package io.github.steveplays28.biomefog.mixin;
 
 import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
+import io.github.steveplays28.biomefog.util.TimeUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.util.math.Vec3d;
@@ -27,6 +28,8 @@ public class WorldRendererMixin {
 		var skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
 		if (world.isRaining() || world.isThundering()) {
 			skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
+		} else if (TimeUtil.isNight(world)) {
+			skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
 		}
 
 		return original.add(skyColorAddition);
