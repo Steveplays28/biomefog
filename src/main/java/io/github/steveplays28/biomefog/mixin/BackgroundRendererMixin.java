@@ -76,8 +76,6 @@ public abstract class BackgroundRendererMixin {
 		MinecraftClient.getInstance().worldRenderer.renderLightSky();
 		MinecraftClient.getInstance().worldRenderer.renderDarkSky();
 
-		BiomeFogClient.LOGGER.info(TimeUtil.isNight(world));
-
 //		BiomeFogClient.LOGGER.info("\nfogColor: {}\nactualFogColor: {}\nlerpTime: {}", BiomeFogConfigLoader.CONFIG.fogColor, RenderSystem.getShaderFogColor(), BiomeFogConfigLoader.CONFIG.fogColorLerpTime);
 //		BiomeFogClient.LOGGER.info("fogStartAddition: {}\nfogEndAddition: {}", BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogEndAddition);
 	}

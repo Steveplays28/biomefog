@@ -11,7 +11,7 @@ public class BiomeFogConfig {
 	// Sky colors
 	public Vec3d skyColor = new Vec3d(0.68f, 0.83f, 1f);
 	public Vec3d skyColorRain = new Vec3d(0.4f, 0.46f, 0.54f);
-	public Vec3d skyColorNight = new Vec3d(0.15f, 0.15f, 0.15f);
+	public Vec3d skyColorNight = new Vec3d(0f, 0f, 0f);
 	public Map<String, Vec3d> skyColorAdditions = Map.ofEntries(
 			entry("minecraft:plains", new Vec3d(0.15f, 0.15f, 0.15f))
 	);
@@ -107,7 +107,8 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f)
+			entry("minecraft:wooded_badlands", 0f),
+			entry("minecraft:plains", 100f)
 	);
 	public Map<String, Float> fogEndAdditions = Map.ofEntries(
 			entry("minecraft:swamp", 0f),
@@ -128,7 +129,8 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f)
+			entry("minecraft:wooded_badlands", 0f),
+			entry("minecraft:plains", 200f)
 	);
 	public Map<String, Float> fogStartAdditionsRain = Map.ofEntries(
 			entry("minecraft:swamp", 0f),
@@ -149,7 +151,8 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f)
+			entry("minecraft:wooded_badlands", 0f),
+			entry("minecraft:plains", 100f)
 	);
 	public Map<String, Float> fogEndAdditionsRain = Map.ofEntries(
 			entry("minecraft:swamp", 0f),
@@ -170,7 +173,8 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f)
+			entry("minecraft:wooded_badlands", 0f),
+			entry("minecraft:plains", 200f)
 	);
 	public Map<String, Float> fogStartAdditionsNight = Map.ofEntries(
 			entry("minecraft:swamp", 0f),
