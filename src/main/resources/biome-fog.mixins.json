@@ -7,8 +7,6 @@
   ],
   "client": [
     "BackgroundRendererMixin",
-    "DimensionEffectsMixin",
-    "DimensionEffectsOverworldMixin",
     "WorldRendererMixin"
   ],
   "injectors": {
