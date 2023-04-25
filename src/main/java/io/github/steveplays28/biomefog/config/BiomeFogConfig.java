@@ -11,6 +11,12 @@ public class BiomeFogConfig {
 	// Sky colors
 	public Vec3d skyColor = new Vec3d(0.68f, 0.83f, 1f);
 	public Vec3d skyColorRain = new Vec3d(0.4f, 0.46f, 0.54f);
+	public Map<String, Vec3d> skyColorAdditions = Map.ofEntries(
+			entry("minecraft:plains", new Vec3d(0.15f, 0.15f, 0.15f))
+	);
+	public Map<String, Vec3d> skyColorAdditionsRain = Map.ofEntries(
+			entry("minecraft:plains", new Vec3d(0.15f, 0.15f, 0.15f))
+	);
 
 	// Fog colors
 	public Map<String, Vector4f> fogColors = Map.ofEntries(

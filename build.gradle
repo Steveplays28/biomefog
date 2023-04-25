@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
     id 'fabric-loom' version '1.1.4'
     id 'maven-publish'
@@ -94,9 +95,8 @@ loom {
             name "Client Optimised"
 
             dependencies {
-                modRuntimeOnly "maven.modrinth:modmenu:eIrlBn1Z"
+                modRuntimeOnly "maven.modrinth:modmenu:yjjsLqbS"
                 modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-                modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
             }
 
             client()
@@ -106,13 +106,12 @@ loom {
             name "Client Optimized Sodium"
 
             dependencies {
-                modRuntimeOnly "maven.modrinth:modmenu:eIrlBn1Z"
+                modRuntimeOnly "maven.modrinth:modmenu:yjjsLqbS"
                 modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-                modRuntimeOnly "maven.modrinth:just-load:ob5o9Cf5"
-                modRuntimeOnly "maven.modrinth:sodium:oYfJQ6lR"
-                modRuntimeOnly "maven.modrinth:reeses-sodium-options:hkSQ9RqT"
-                modRuntimeOnly "maven.modrinth:lithium:XS6vJwop"
-                modRuntimeOnly "maven.modrinth:ferrite-core:GHcKib6J"
+                modRuntimeOnly "maven.modrinth:sodium:b4hTi3mo"
+                modRuntimeOnly "maven.modrinth:reeses-sodium-options:aO0hSGlL"
+                modRuntimeOnly "maven.modrinth:lithium:14hWYkog"
+                modRuntimeOnly "maven.modrinth:ferrite-core:RbR7EG8T"
             }
 
             client()
