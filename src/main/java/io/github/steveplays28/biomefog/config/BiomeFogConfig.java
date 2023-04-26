@@ -9,9 +9,6 @@ import static java.util.Map.entry;
 
 public class BiomeFogConfig {
 	// Sky colors
-	public Vec3d skyColor = new Vec3d(0.68f, 0.83f, 1f);
-	public Vec3d skyColorRain = new Vec3d(0.4f, 0.46f, 0.54f);
-	public Vec3d skyColorNight = new Vec3d(0f, 0f, 0f);
 	public Map<String, Vec3d> skyColorAdditions = Map.ofEntries(
 			entry("minecraft:overworld", new Vec3d(0.15f, 0.15f, 0.15f))
 	);
@@ -23,6 +20,9 @@ public class BiomeFogConfig {
 	);
 
 	// Fog colors
+	public Vec3d defaultFogColor = new Vec3d(0.68f, 0.83f, 1f);
+	public Vec3d defaultFogColorRain = new Vec3d(0.4f, 0.46f, 0.54f);
+	public Vec3d defaultFogColorNight = new Vec3d(0f, 0f, 0f);
 	public Map<String, Vector4f> fogColors = Map.ofEntries(
 			entry("minecraft:swamp", new Vector4f(0.28f, 0.28f, 0.05f, 1f)),
 			entry("minecraft:mangrove_swamp", new Vector4f(0.28f, 0.28f, 0.05f, 1f)),
@@ -219,7 +219,7 @@ public class BiomeFogConfig {
 			entry("minecraft:wooded_badlands", 0f)
 	);
 
-	public transient Vector4f fogColor = new Vector4f(this.skyColor.toVector3f(), 1f);
+	public transient Vector4f fogColor = new Vector4f(this.defaultFogColor.toVector3f(), 1f);
 	public transient float fogColorLerpTime;
 	public transient float fogStartAddition = 0f;
 	public transient float fogEndAddition = 0f;

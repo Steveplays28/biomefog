@@ -43,7 +43,7 @@ public abstract class BackgroundRendererMixin {
 			if (BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentBiome);
 			} else {
-				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorRain.toVector3f(), 1f);
+				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorRain.toVector3f(), 1f);
 			}
 
 			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome)) {
@@ -58,7 +58,7 @@ public abstract class BackgroundRendererMixin {
 			if (BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsNight.get(BiomeFogClient.currentBiome);
 			} else {
-				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.skyColorNight.toVector3f(), 1f);
+				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorNight.toVector3f(), 1f);
 			}
 
 			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome)) {
@@ -73,7 +73,7 @@ public abstract class BackgroundRendererMixin {
 			if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentBiome);
 			} else {
-				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.skyColor.toVector3f(), 1f);
+				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColor.toVector3f(), 1f);
 			}
 
 			if (BiomeFogConfigLoader.CONFIG.fogStartAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
