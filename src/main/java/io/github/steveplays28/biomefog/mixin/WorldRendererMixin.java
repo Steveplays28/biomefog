@@ -25,14 +25,14 @@ public class WorldRendererMixin {
 		var world = MinecraftClient.getInstance().world;
 		if (world == null) return original;
 
-		var skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
+		BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
 		if (world.isRaining() || world.isThundering()) {
-			skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
+			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
 		} else if (TimeUtil.isNight(world)) {
-			skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, new Vec3d(0f, 0f, 0f));
+			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
 		}
 
-		return original.add(skyColorAddition);
+		return original.add(BiomeFogConfigLoader.CONFIG.skyColorAddition);
 	}
 
 	// Changes clouds color

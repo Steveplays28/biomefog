@@ -223,4 +223,5 @@ public class BiomeFogConfig {
 	public transient float fogColorLerpTime;
 	public transient float fogStartAddition = 0f;
 	public transient float fogEndAddition = 0f;
+	public transient Vec3d skyColorAddition = Vec3d.ZERO;
 }
