@@ -33,6 +33,11 @@ public abstract class BackgroundRendererMixin {
 		BiomeFogClient.currentBiome = WorldUtil.GetBiomeBelowCamera(camera).toString();
 		BiomeFogClient.currentDimension = WorldUtil.GetDimension().toString();
 
+		// Check if current dimension is enabled
+		if (!BiomeFogConfigLoader.CONFIG.enabledDimensions.contains(BiomeFogClient.currentDimension) && !BiomeFogConfigLoader.CONFIG.enabledDimensions.contains("all")) {
+			return;
+		}
+
 		// Set custom fog and sky color
 		Vector4f currentBiomeFogColor;
 

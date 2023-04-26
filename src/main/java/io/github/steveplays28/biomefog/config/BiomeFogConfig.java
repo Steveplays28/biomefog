@@ -3,11 +3,18 @@ package io.github.steveplays28.biomefog.config;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;
 
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
 public class BiomeFogConfig {
+	// Enabled dimensions
+	public List<String> enabledDimensions = List.of(
+			"minecraft:overworld",
+			"minecraft:the_nether"
+	);
+
 	// Sky colors
 	public Map<String, Vec3d> skyColorAdditions = Map.ofEntries(
 			entry("minecraft:overworld", new Vec3d(0.15f, 0.15f, 0.15f))
