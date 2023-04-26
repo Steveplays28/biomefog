@@ -42,6 +42,8 @@ public abstract class BackgroundRendererMixin {
 
 			if (BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentBiome);
+			} else if (BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentDimension)) {
+				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentDimension);
 			} else {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorRain.toVector3f(), 1f);
 			}
@@ -57,6 +59,8 @@ public abstract class BackgroundRendererMixin {
 
 			if (BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsNight.get(BiomeFogClient.currentBiome);
+			} else if (BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentDimension)) {
+				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsNight.get(BiomeFogClient.currentDimension);
 			} else {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorNight.toVector3f(), 1f);
 			}
@@ -72,6 +76,8 @@ public abstract class BackgroundRendererMixin {
 
 			if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentBiome);
+			} else if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentDimension)) {
+				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentDimension);
 			} else {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColor.toVector3f(), 1f);
 			}
