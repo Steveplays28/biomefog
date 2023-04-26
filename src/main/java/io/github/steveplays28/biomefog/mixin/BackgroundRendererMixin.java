@@ -61,7 +61,7 @@ public abstract class BackgroundRendererMixin {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorNight.toVector3f(), 1f);
 			}
 
-			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome)) {
+			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentDimension)) {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime + tickDelta * 0.001f);
 			} else {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
@@ -76,7 +76,7 @@ public abstract class BackgroundRendererMixin {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColor.toVector3f(), 1f);
 			}
 
-			if (BiomeFogConfigLoader.CONFIG.fogStartAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
+			if (BiomeFogConfigLoader.CONFIG.fogStartAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditions.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogStartAdditions.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogEndAdditions.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentDimension)) {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime + tickDelta * 0.001f);
 			} else {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
