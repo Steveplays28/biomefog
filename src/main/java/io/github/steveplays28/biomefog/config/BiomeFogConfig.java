@@ -89,28 +89,19 @@ public class BiomeFogConfig {
 
 	// Fog start additions and fog end additions
 	public Map<String, Float> fogStartAdditions = Map.ofEntries(
+			entry("minecraft:overworld", 100f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
 			entry("minecraft:bamboo_jungle", 0f),
 			entry("minecraft:sparse_jungle", 0f),
-			entry("minecraft:snowy_plains", 100f),
-			entry("minecraft:snowy_slopes", 100f),
-			entry("minecraft:snowy_taiga", 100f),
-			entry("minecraft:snowy_beach", 100f),
-			entry("minecraft:frozen_peaks", 100f),
-			entry("minecraft:jagged_peaks", 100f),
-			entry("minecraft:frozen_ocean", 100f),
-			entry("minecraft:frozen_river", 100f),
-			entry("minecraft:ice_spikes", 100f),
-			entry("minecraft:grove", 100f),
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f),
-			entry("minecraft:plains", 100f)
+			entry("minecraft:wooded_badlands", 0f)
 	);
 	public Map<String, Float> fogEndAdditions = Map.ofEntries(
+			entry("minecraft:overworld", 200f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -129,10 +120,10 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f),
-			entry("minecraft:plains", 200f)
+			entry("minecraft:wooded_badlands", 0f)
 	);
 	public Map<String, Float> fogStartAdditionsRain = Map.ofEntries(
+			entry("minecraft:overworld", 100f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -151,10 +142,10 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f),
-			entry("minecraft:plains", 100f)
+			entry("minecraft:wooded_badlands", 0f)
 	);
 	public Map<String, Float> fogEndAdditionsRain = Map.ofEntries(
+			entry("minecraft:overworld", 200f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -173,8 +164,7 @@ public class BiomeFogConfig {
 			entry("minecraft:desert", 0f),
 			entry("minecraft:badlands", 0f),
 			entry("minecraft:eroded_badlands", 0f),
-			entry("minecraft:wooded_badlands", 0f),
-			entry("minecraft:plains", 200f)
+			entry("minecraft:wooded_badlands", 0f)
 	);
 	public Map<String, Float> fogStartAdditionsNight = Map.ofEntries(
 			entry("minecraft:swamp", 0f),

@@ -37,8 +37,8 @@ public abstract class BackgroundRendererMixin {
 		Vector4f currentBiomeFogColor;
 
 		if (world.isRaining() || world.isThundering()) {
-			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
-			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
 
 			if (BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsRain.get(BiomeFogClient.currentBiome);
@@ -46,14 +46,14 @@ public abstract class BackgroundRendererMixin {
 				currentBiomeFogColor = new Vector4f(BiomeFogConfigLoader.CONFIG.defaultFogColorRain.toVector3f(), 1f);
 			}
 
-			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome)) {
+			if (BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentBiome) || BiomeFogConfigLoader.CONFIG.fogStartAdditionsRain.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogEndAdditionsRain.containsKey(BiomeFogClient.currentDimension) || BiomeFogConfigLoader.CONFIG.fogColorsRain.containsKey(BiomeFogClient.currentDimension)) {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime + tickDelta * 0.001f);
 			} else {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
 			}
 		} else if (TimeUtil.isNight(world)) {
-			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
-			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogStartAdditionsNight.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogEndAdditionsNight.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
 
 			if (BiomeFogConfigLoader.CONFIG.fogColorsNight.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColorsNight.get(BiomeFogClient.currentBiome);
@@ -67,8 +67,8 @@ public abstract class BackgroundRendererMixin {
 				BiomeFogConfigLoader.CONFIG.fogColorLerpTime = Math.clamp(0f, 1f, BiomeFogConfigLoader.CONFIG.fogColorLerpTime - tickDelta * 0.001f);
 			}
 		} else {
-			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
-			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditions.getOrDefault(BiomeFogClient.currentBiome, 0f), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogStartAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogStartAddition, BiomeFogConfigLoader.CONFIG.fogStartAdditions.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogStartAdditions.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
+			BiomeFogConfigLoader.CONFIG.fogEndAddition = Math.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition, BiomeFogConfigLoader.CONFIG.fogEndAdditions.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.fogEndAdditions.getOrDefault(BiomeFogClient.currentDimension, 0f)), 0.001f);
 
 			if (BiomeFogConfigLoader.CONFIG.fogColors.containsKey(BiomeFogClient.currentBiome)) {
 				currentBiomeFogColor = BiomeFogConfigLoader.CONFIG.fogColors.get(BiomeFogClient.currentBiome);
