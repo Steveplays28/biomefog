@@ -24,6 +24,7 @@ public class BiomeFogConfig {
 	public Vec3d defaultFogColorRain = new Vec3d(0.4f, 0.46f, 0.54f);
 	public Vec3d defaultFogColorNight = new Vec3d(0f, 0f, 0f);
 	public Map<String, Vector4f> fogColors = Map.ofEntries(
+			entry("minecraft:the_nether", new Vector4f(0.26f, 0f, 0f, 1f)),
 			entry("minecraft:swamp", new Vector4f(0.28f, 0.28f, 0.05f, 1f)),
 			entry("minecraft:mangrove_swamp", new Vector4f(0.28f, 0.28f, 0.05f, 1f)),
 			entry("minecraft:jungle", new Vector4f(0.15f, 0.42f, 0.13f, 1f)),
@@ -45,6 +46,7 @@ public class BiomeFogConfig {
 			entry("minecraft:wooded_badlands", new Vector4f(0.75f, 0.4f, 0.13f, 1f))
 	);
 	public Map<String, Vector4f> fogColorsRain = Map.ofEntries(
+			entry("minecraft:the_nether", new Vector4f(0.26f, 0f, 0f, 1f)),
 			entry("minecraft:swamp", new Vector4f(0.042f, 0.042f, 0.0075f, 1f)),
 			entry("minecraft:mangrove_swamp", new Vector4f(0.042f, 0.042f, 0.0075f, 1f)),
 			entry("minecraft:jungle", new Vector4f(0.0225f, 0.063f, 0.0195f, 1f)),
@@ -66,6 +68,7 @@ public class BiomeFogConfig {
 			entry("minecraft:wooded_badlands", new Vector4f(0.75f, 0.4f, 0.13f, 1f))
 	);
 	public Map<String, Vector4f> fogColorsNight = Map.ofEntries(
+			entry("minecraft:the_nether", new Vector4f(0.26f, 0f, 0f, 1f)),
 			entry("minecraft:swamp", new Vector4f(0.042f, 0.042f, 0.0075f, 1f)),
 			entry("minecraft:mangrove_swamp", new Vector4f(0.042f, 0.042f, 0.0075f, 1f)),
 			entry("minecraft:jungle", new Vector4f(0.0225f, 0.063f, 0.0195f, 1f)),
@@ -90,6 +93,7 @@ public class BiomeFogConfig {
 	// Fog start additions and fog end additions
 	public Map<String, Float> fogStartAdditions = Map.ofEntries(
 			entry("minecraft:overworld", 100f),
+			entry("minecraft:the_nether", 100f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -102,6 +106,7 @@ public class BiomeFogConfig {
 	);
 	public Map<String, Float> fogEndAdditions = Map.ofEntries(
 			entry("minecraft:overworld", 200f),
+			entry("minecraft:the_nether", 200f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -124,6 +129,7 @@ public class BiomeFogConfig {
 	);
 	public Map<String, Float> fogStartAdditionsRain = Map.ofEntries(
 			entry("minecraft:overworld", 100f),
+			entry("minecraft:the_nether", 100f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
@@ -146,6 +152,7 @@ public class BiomeFogConfig {
 	);
 	public Map<String, Float> fogEndAdditionsRain = Map.ofEntries(
 			entry("minecraft:overworld", 200f),
+			entry("minecraft:the_nether", 200f),
 			entry("minecraft:swamp", 0f),
 			entry("minecraft:mangrove_swamp", 0f),
 			entry("minecraft:jungle", 0f),
