@@ -25,11 +25,11 @@ public class WorldRendererMixin {
 		var world = MinecraftClient.getInstance().world;
 		if (world == null) return original;
 
-		BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
+		BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
 		if (world.isRaining() || world.isThundering()) {
-			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
+			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
 		} else if (TimeUtil.isNight(world)) {
-			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, Vec3d.ZERO), 0.001f);
+			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
 		}
 
 		return original.add(BiomeFogConfigLoader.CONFIG.skyColorAddition);

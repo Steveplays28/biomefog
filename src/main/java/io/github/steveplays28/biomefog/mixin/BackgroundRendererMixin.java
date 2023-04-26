@@ -3,9 +3,9 @@ package io.github.steveplays28.biomefog.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
-import io.github.steveplays28.biomefog.util.BiomeUtil;
 import io.github.steveplays28.biomefog.util.RenderSystemUtil;
 import io.github.steveplays28.biomefog.util.TimeUtil;
+import io.github.steveplays28.biomefog.util.WorldUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -29,8 +29,9 @@ public abstract class BackgroundRendererMixin {
 			return;
 		}
 
-		// Get current biome (at the camera's position)
-		BiomeFogClient.currentBiome = BiomeUtil.GetBiomeBelowCamera(camera).toString();
+		// Get current biome and dimension (at the camera's position)
+		BiomeFogClient.currentBiome = WorldUtil.GetBiomeBelowCamera(camera).toString();
+		BiomeFogClient.currentDimension = WorldUtil.GetDimension().toString();
 
 		// Set custom fog and sky color
 		Vector4f currentBiomeFogColor;
