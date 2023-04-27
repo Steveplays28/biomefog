@@ -57,12 +57,11 @@ jobs:
 
           # Modrinth
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-name: ${{ steps.mod_version.outputs.value }}
 
           # CurseForge
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          curseforge-name: ${{ steps.mod_version.outputs.value }}+mc${{ steps.supported_minecraft_version.outputs.value }}
 
+          name: ${{ steps.mod_version.outputs.value }} (${{ steps.supported_minecraft_version.outputs.value }})
           github-tag: v${{ steps.mod_version.outputs.value }}+mc${{ steps.supported_minecraft_version.outputs.value }}
           files-primary: build/libs/!(*-@(dev|sources|javadoc)).jar
           files-secondary: build/libs/*-@(dev|sources|javadoc).jar
