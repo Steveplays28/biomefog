@@ -24,6 +24,14 @@ Everything is fully configurable in the `biome-fog.json` config file. You can re
 
 - [Fabric API](https://modrinth.com/mod/fabric-api) or [Quilt Standard Libraries](https://modrinth.com/mod/qsl)
 
+### Conflicts
+
+- [Clear Skies](): the features of Clear Skies are overwritten by Biome Fog's features
+
+### Suggested mods
+
+- [Sodium](https://modrinth.com/mod/sodium): makes cloud colors less affected by fog
+
 ## Download
 
 [![github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/available/github_vector.svg)](https://github.com/Steveplays28/biome-fog)
