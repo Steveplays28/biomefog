@@ -97,23 +97,10 @@ loom {
             name "Client Optimised"
 
             dependencies {
-                modRuntimeOnly "maven.modrinth:modmenu:yjjsLqbS"
+                modRuntimeOnly "maven.modrinth:modmenu:gSoPJyVn"
                 modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-            }
-
-            client()
-        }
-
-        clientOptimisedSodium {
-            name "Client Optimized Sodium"
-
-            dependencies {
-                modRuntimeOnly "maven.modrinth:modmenu:yjjsLqbS"
-                modRuntimeOnly "maven.modrinth:lazydfu:4SHylIO9"
-                modRuntimeOnly "maven.modrinth:sodium:b4hTi3mo"
-                modRuntimeOnly "maven.modrinth:reeses-sodium-options:aO0hSGlL"
-                modRuntimeOnly "maven.modrinth:lithium:14hWYkog"
-                modRuntimeOnly "maven.modrinth:ferrite-core:RbR7EG8T"
+                modRuntimeOnly "maven.modrinth:lithium:m6sVgAi6"
+                modRuntimeOnly "maven.modrinth:ferrite-core:kwjHqfz7"
             }
 
             client()
