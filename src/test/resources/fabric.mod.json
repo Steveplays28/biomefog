@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "biome-fog",
+  "id": "biome-fog-test",
   "version": "${version}",
-  "name": "Biome Fog",
-  "description": "Adds unique fog to a bunch of biomes!",
+  "name": "Biome Fog Test",
+  "description": "TEST - Adds unique fog to a bunch of biomes!",
   "authors": [
     "Steveplays28"
   ],
@@ -25,20 +25,15 @@
     }
   },
   "license": "LGPL-3.0",
-  "icon": "assets/biome-fog/icon.png",
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "io.github.steveplays28.biomefog.client.BiomeFogClient"
+    "fabric-gametest": [
+      "io.github.steveplays28.biomefog.gametest.GameTests"
     ]
   },
-  "mixins": [
-    "biome-fog.mixins.json"
-  ],
   "depends": {
     "fabricloader": ">=0.14.0",
-    "fabric": ">=0.48.0",
-    "minecraft": "1.19.x"
-  },
-  "accessWidener": "biome-fog.accesswidener"
+    "minecraft": "1.19.x",
+    "fabric": ">=0.48.0"
+  }
 }

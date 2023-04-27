@@ -14,6 +14,7 @@ public class BiomeFogClient implements ClientModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	public static String currentBiome = "";
+	public static String currentDimension = "";
 
 	@Override
 	public void onInitializeClient() {
