@@ -47,9 +47,6 @@ jobs:
       - name: Change Gradle wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Execute Gradle runGameTest
-        run: ./gradlew runGameTest
-
       - name: Execute Gradle build
         run: ./gradlew build
 

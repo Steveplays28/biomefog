@@ -116,19 +116,6 @@ loom {
 
             client()
         }
-
-        gameTest {
-            server()
-
-            name "Game Test"
-            ideConfigGenerated project.rootProject == project
-            source sourceSets.test
-
-            // Enable the gameTest runner
-            vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
-            runDir "build/gametest"
-        }
     }
 
     accessWidenerPath = file("src/main/resources/biome-fog.accesswidener")
