@@ -21,6 +21,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         with:
           paths_ignore: '["**/README.md", "**/docs/**", "**/.gitignore", "**/LICENSE"]'
+          concurrent_skipping: same_content_newer
 
   run_tests_and_build:
     name: Run tests and build
