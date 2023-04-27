@@ -37,7 +37,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.14.0",
-    "fabric": "*",
+    "fabric": ">=0.48.0",
     "minecraft": "1.19.x"
   },
   "accessWidener": "biome-fog.accesswidener"
