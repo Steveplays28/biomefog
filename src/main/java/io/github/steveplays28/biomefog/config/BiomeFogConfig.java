@@ -20,7 +20,7 @@ public class BiomeFogConfig {
 			entry("minecraft:overworld", new Vec3d(0.15f, 0.15f, 0.15f))
 	);
 	public Map<String, Vec3d> skyColorAdditionsRain = Map.ofEntries(
-			entry("minecraft:overworld", new Vec3d(0.15f, 0.15f, 0.15f))
+			entry("minecraft:overworld", new Vec3d(-0.15f, -0.15f, -0.15f))
 	);
 	public Map<String, Vec3d> skyColorAdditionsNight = Map.ofEntries(
 			entry("minecraft:overworld", new Vec3d(0f, 0f, 0f))
