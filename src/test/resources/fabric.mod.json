@@ -20,8 +20,8 @@
     },
     "mc-publish": {
       "quilt": true,
-      "curseforge": -1,
-      "modrinth": "-1"
+      "curseforge": 855301,
+      "modrinth": "kN6Djea2"
     }
   },
   "license": "LGPL-3.0",
