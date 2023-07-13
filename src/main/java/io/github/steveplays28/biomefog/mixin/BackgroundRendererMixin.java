@@ -21,19 +21,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRendererMixin {
+	private static Boolean shouldApplyFog = true;
+
 	@Inject(method = "applyFog", at = @At("TAIL"))
 	private static void applyFogInject(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
 		var world = MinecraftClient.getInstance().world;
-		if (world == null || world.getBiome(camera.getBlockPos()).getKey().isEmpty() || !camera.getSubmersionType().equals(CameraSubmersionType.NONE)) {
+		var cameraSubmersionType = camera.getSubmersionType();
+		if (world == null || world.getBiome(camera.getBlockPos()).getKey().isEmpty() || !(cameraSubmersionType.equals(
+				CameraSubmersionType.NONE) || cameraSubmersionType.equals(CameraSubmersionType.WATER))) {
+			shouldApplyFog = false;
 			return;
 		}
+
+		shouldApplyFog = true;
 
 		// Get current biome and dimension (at the camera's position)
 		BiomeFogClient.currentBiome = WorldUtil.GetBiomeBelowCamera(camera).toString();
 		BiomeFogClient.currentDimension = WorldUtil.GetDimension().toString();
 
 		// Check if current dimension is enabled
-		if (!BiomeFogConfigLoader.CONFIG.enabledDimensions.contains(BiomeFogClient.currentDimension) && !BiomeFogConfigLoader.CONFIG.enabledDimensions.contains("all")) {
+		if (!BiomeFogConfigLoader.CONFIG.enabledDimensions.contains(
+				BiomeFogClient.currentDimension) && !BiomeFogConfigLoader.CONFIG.enabledDimensions.contains("all")) {
 			return;
 		}
 
@@ -121,15 +129,19 @@ public abstract class BackgroundRendererMixin {
 	// Changes the color of bottom part of the sky
 	@Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
 	private static void renderInject(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
-		RenderSystemUtil.setClearColor(BiomeFogConfigLoader.CONFIG.fogColor);
-		clearFog();
-		ci.cancel();
+		if (shouldApplyFog) {
+			RenderSystemUtil.setClearColor(BiomeFogConfigLoader.CONFIG.fogColor);
+			clearFog();
+			ci.cancel();
+		}
 	}
 
 	// Changes the color of the seam/transition in the sky
 	@Inject(method = "setFogBlack", at = @At("HEAD"), cancellable = true)
 	private static void setFogBlackInject(CallbackInfo ci) {
-		RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
-		ci.cancel();
+		if (shouldApplyFog) {
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
+			ci.cancel();
+		}
 	}
 }
