@@ -14,6 +14,7 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +32,10 @@ public abstract class BackgroundRendererMixin {
 	@Inject(method = "applyFog", at = @At("TAIL"))
 	private static void applyFogInject(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
 		var world = MinecraftClient.getInstance().world;
+		var player = MinecraftClient.getInstance().player;
 		var cameraSubmersionType = camera.getSubmersionType();
-		if (world == null || world.getBiome(camera.getBlockPos()).getKey().isEmpty() || !(cameraSubmersionType.equals(
+		if (world == null || player == null || world.getBiome(
+				camera.getBlockPos()).getKey().isEmpty() || !(cameraSubmersionType.equals(
 				CameraSubmersionType.NONE) || cameraSubmersionType.equals(CameraSubmersionType.WATER))) {
 			shouldApplyFog = false;
 			return;
@@ -80,11 +83,12 @@ public abstract class BackgroundRendererMixin {
 						fogStartAdditions.getOrDefault(BiomeFogClient.currentDimension, 0f)
 				), 0.001f
 		);
-		BiomeFogConfigLoader.CONFIG.fogEndAddition = MathUtil.lerp(
-				BiomeFogConfigLoader.CONFIG.fogEndAddition, fogEndAdditions.getOrDefault(
+		BiomeFogConfigLoader.CONFIG.fogEndAddition = MathUtil.lerp(BiomeFogConfigLoader.CONFIG.fogEndAddition,
+				fogEndAdditions.getOrDefault(
 						BiomeFogClient.currentBiome,
 						fogEndAdditions.getOrDefault(BiomeFogClient.currentDimension, 0f)
-				), 0.001f);
+				), 0.001f
+		);
 
 		if (fogColors.containsKey(BiomeFogClient.currentBiome)) {
 			currentBiomeFogColor = fogColors.get(BiomeFogClient.currentBiome);
@@ -110,15 +114,32 @@ public abstract class BackgroundRendererMixin {
 		BiomeFogConfigLoader.CONFIG.fogColor = BiomeFogConfigLoader.CONFIG.fogColor.lerp(currentBiomeFogColor, 0.001f);
 
 		// Update fog
-		RenderSystem.setShaderFogStart(
-				MathUtil.lerp(vanillaFogStart(viewDistance), 0f + BiomeFogConfigLoader.CONFIG.fogStartAddition,
-						BiomeFogConfigLoader.CONFIG.fogColorLerpTime
-				));
-		RenderSystem.setShaderFogEnd(
-				MathUtil.lerp(viewDistance, viewDistance / 3 + BiomeFogConfigLoader.CONFIG.fogEndAddition,
-						BiomeFogConfigLoader.CONFIG.fogColorLerpTime
-				));
-		RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
+		if (cameraSubmersionType.equals(CameraSubmersionType.WATER)) {
+			RenderSystem.setShaderFogStart(-8f);
+
+			var fogEnd = 96.0f;
+			fogEnd *= Math.max(0.25f, player.getUnderwaterVisibility());
+			if (fogEnd > viewDistance) {
+				fogEnd = viewDistance;
+			}
+
+			var currentBiome = player.world.getBiome(player.getBlockPos());
+			if (currentBiome.isIn(BiomeTags.HAS_CLOSER_WATER_FOG)) {
+				fogEnd *= 0.85f;
+			}
+
+			RenderSystem.setShaderFogEnd(fogEnd);
+		} else {
+			RenderSystem.setShaderFogStart(
+					MathUtil.lerp(vanillaFogStart(viewDistance), 0f + BiomeFogConfigLoader.CONFIG.fogStartAddition,
+							BiomeFogConfigLoader.CONFIG.fogColorLerpTime
+					));
+			RenderSystem.setShaderFogEnd(
+					MathUtil.lerp(viewDistance, viewDistance / 3 + BiomeFogConfigLoader.CONFIG.fogEndAddition,
+							BiomeFogConfigLoader.CONFIG.fogColorLerpTime
+					));
+			RenderSystemUtil.setShaderFogColor(BiomeFogConfigLoader.CONFIG.fogColor);
+		}
 
 		// Re-render light and dark skies to update WorldRendererMixin changes
 		MinecraftClient.getInstance().worldRenderer.renderLightSky();
