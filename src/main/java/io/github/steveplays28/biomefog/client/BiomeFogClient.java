@@ -1,9 +1,11 @@
 package io.github.steveplays28.biomefog.client;
 
+import io.github.steveplays28.biomefog.command.ClientCommandRegistration;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class BiomeFogClient implements ClientModInitializer {
 	public static final String MOD_ID = "biome-fog";
 	public static final String MOD_PATH = "biome_fog";
+	public static final String MOD_COMMAND_ID = "biomefog";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	public static String currentBiome = "";
@@ -26,5 +29,9 @@ public class BiomeFogClient implements ClientModInitializer {
 			LOGGER.info("[Biome Fog] Reloading config!");
 			BiomeFogConfigLoader.load();
 		});
+
+		// Register commands
+		ClientCommandRegistrationCallback.EVENT.register(
+				(dispatcher, registryAccess) -> ClientCommandRegistration.registerCommands(dispatcher));
 	}
 }
