@@ -1,5 +1,6 @@
-package io.github.steveplays28.biomefog.config;
+package io.github.steveplays28.biomefog.config.user;
 
+import io.github.steveplays28.biomefog.config.BiomeFogBaseConfig;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class BiomeFogConfig {
+public class BiomeFogConfig implements BiomeFogBaseConfig {
 	// Enabled dimensions
 	public List<String> enabledDimensions = List.of(
 			"minecraft:overworld",

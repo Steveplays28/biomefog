@@ -1,7 +1,6 @@
 package io.github.steveplays28.biomefog.mixin;
 
 import io.github.steveplays28.biomefog.client.BiomeFogClient;
-import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.util.TimeUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,6 +10,8 @@ import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+import static io.github.steveplays28.biomefog.config.BiomeFogConfigLoader.BiomeFogConfigurations.CONFIG;
 
 @Environment(EnvType.CLIENT)
 @Mixin(WorldRenderer.class)
@@ -28,13 +29,22 @@ public class WorldRendererMixin {
 		var world = MinecraftClient.getInstance().world;
 		if (world == null) return original;
 
-		BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
+		CONFIG.skyColorAddition = CONFIG.skyColorAddition.lerp(CONFIG.skyColorAdditions.getOrDefault(
+				BiomeFogClient.currentBiome,
+				CONFIG.skyColorAdditions.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)
+		), 0.001f);
 		if (world.isRaining() || world.isThundering()) {
-			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
+			CONFIG.skyColorAddition = CONFIG.skyColorAddition.lerp(CONFIG.skyColorAdditionsRain.getOrDefault(
+					BiomeFogClient.currentBiome,
+					CONFIG.skyColorAdditionsRain.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)
+			), 0.001f);
 		} else if (TimeUtil.isNight(world)) {
-			BiomeFogConfigLoader.CONFIG.skyColorAddition = BiomeFogConfigLoader.CONFIG.skyColorAddition.lerp(BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentBiome, BiomeFogConfigLoader.CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)), 0.001f);
+			CONFIG.skyColorAddition = CONFIG.skyColorAddition.lerp(CONFIG.skyColorAdditionsNight.getOrDefault(
+					BiomeFogClient.currentBiome,
+					CONFIG.skyColorAdditionsNight.getOrDefault(BiomeFogClient.currentDimension, Vec3d.ZERO)
+			), 0.001f);
 		}
 
-		return original.add(BiomeFogConfigLoader.CONFIG.skyColorAddition);
+		return original.add(CONFIG.skyColorAddition);
 	}
 }

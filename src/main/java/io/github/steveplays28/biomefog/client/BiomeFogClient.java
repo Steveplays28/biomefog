@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 @Environment(EnvType.CLIENT)
 public class BiomeFogClient implements ClientModInitializer {
 	public static final String MOD_ID = "biome-fog";
+	public static final String MOD_PATH = "biome_fog";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	public static String currentBiome = "";
@@ -18,7 +19,7 @@ public class BiomeFogClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		BiomeFogConfigLoader.CONFIG = BiomeFogConfigLoader.load();
+		BiomeFogConfigLoader.load();
 
 		// Listen for when the server is reloading (i.e. /reload), and reload the config
 		ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((s, m) -> {
