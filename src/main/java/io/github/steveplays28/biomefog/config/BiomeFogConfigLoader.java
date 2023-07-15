@@ -51,12 +51,12 @@ public class BiomeFogConfigLoader {
 	public static void save() {
 		var success = true;
 		var configurationFilePaths = BiomeFogConfigurationFilePaths.class.getFields();
-		var defaultConfigurations = BiomeFogDefaultConfigurations.class.getFields();
+		var configurations = BiomeFogConfigurations.class.getFields();
 
 		for (int i = 0; i < configurationFilePaths.length; i++) {
 			try (FileWriter writer = new FileWriter(configurationFilePaths[i].get(Path.class).toString())) {
 				var gson = createGson();
-				var json = gson.toJson(defaultConfigurations[i].get(BiomeFogBaseConfig.class));
+				var json = gson.toJson(configurations[i].get(BiomeFogBaseConfig.class));
 				writer.write(json);
 
 			} catch (IOException | IllegalAccessException e) {
