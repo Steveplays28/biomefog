@@ -2,10 +2,12 @@ package io.github.steveplays28.biomefog.client;
 
 import io.github.steveplays28.biomefog.command.ClientCommandRegistration;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
+import io.github.steveplays28.biomefog.util.WorldUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,5 +35,12 @@ public class BiomeFogClient implements ClientModInitializer {
 		// Register commands
 		ClientCommandRegistrationCallback.EVENT.register(
 				(dispatcher, registryAccess) -> ClientCommandRegistration.registerCommands(dispatcher));
+
+
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			if (WorldUtil.isWorldBlacklisted(WorldUtil.getWorldOrServerName())) {
+				BiomeFogClient.LOGGER.info("Current world/server is blacklisted, disabling Biome Fog.");
+			}
+		});
 	}
 }

@@ -4,8 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
+import io.github.steveplays28.biomefog.util.WorldUtil;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 import static io.github.steveplays28.biomefog.config.BiomeFogConfigLoader.BiomeFogConfigurations.BLACKLISTED_WORLDS;
@@ -23,21 +23,9 @@ public class BlackListWorldCommand {
 	}
 
 	private static int add(CommandContext<FabricClientCommandSource> context) {
-		var minecraftClient = MinecraftClient.getInstance();
-		var currentServerEntry = minecraftClient.getCurrentServerEntry();
-		var integratedServer = minecraftClient.getServer();
+		var name = WorldUtil.getWorldOrServerName();
 
-		String name;
-		if (currentServerEntry != null && !currentServerEntry.isLocal()) {
-			name = currentServerEntry.name;
-		} else if (minecraftClient.isInSingleplayer() && integratedServer != null) {
-			name = integratedServer.getName();
-		} else {
-			context.getSource().sendError(Text.literal("Couldn't add the current world to the blacklisted worlds."));
-			return -1;
-		}
-
-		if (BLACKLISTED_WORLDS.blackListedWorlds.contains(name)) {
+		if (WorldUtil.isWorldBlacklisted(name)) {
 			context.getSource().sendFeedback(
 					Text.literal("The current world has already been added to the blacklisted worlds!"));
 			return 0;
@@ -51,20 +39,7 @@ public class BlackListWorldCommand {
 	}
 
 	private static int remove(CommandContext<FabricClientCommandSource> context) {
-		var minecraftClient = MinecraftClient.getInstance();
-		var currentServerEntry = minecraftClient.getCurrentServerEntry();
-		var integratedServer = minecraftClient.getServer();
-
-		String name;
-		if (currentServerEntry != null && !currentServerEntry.isLocal()) {
-			name = currentServerEntry.name;
-		} else if (minecraftClient.isInSingleplayer() && integratedServer != null) {
-			name = integratedServer.getName();
-		} else {
-			context.getSource().sendError(
-					Text.literal("Couldn't remove the current world from the blacklisted worlds."));
-			return -1;
-		}
+		var name = WorldUtil.getWorldOrServerName();
 
 		if (BLACKLISTED_WORLDS.blackListedWorlds.remove(name)) {
 			BiomeFogConfigLoader.save();

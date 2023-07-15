@@ -39,7 +39,8 @@ public abstract class BackgroundRendererMixin {
 		var cameraSubmersionType = camera.getSubmersionType();
 		if (world == null || player == null || world.getBiome(
 				camera.getBlockPos()).getKey().isEmpty() || !(cameraSubmersionType.equals(
-				CameraSubmersionType.NONE) || cameraSubmersionType.equals(CameraSubmersionType.WATER))) {
+				CameraSubmersionType.NONE) || cameraSubmersionType.equals(
+				CameraSubmersionType.WATER)) || WorldUtil.isWorldBlacklisted(WorldUtil.getWorldOrServerName())) {
 			shouldApplyFog = false;
 			return;
 		}
