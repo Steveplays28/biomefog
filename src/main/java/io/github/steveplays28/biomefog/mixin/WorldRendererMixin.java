@@ -2,6 +2,7 @@ package io.github.steveplays28.biomefog.mixin;
 
 import io.github.steveplays28.biomefog.client.BiomeFogClient;
 import io.github.steveplays28.biomefog.util.TimeUtil;
+import io.github.steveplays28.biomefog.util.WorldUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -27,7 +28,7 @@ public class WorldRendererMixin {
 	@SuppressWarnings("InvalidInjectorMethodSignature")
 	public Vec3d renderSkyInject(Vec3d original) {
 		var world = MinecraftClient.getInstance().world;
-		if (world == null) return original;
+		if (world == null || WorldUtil.isWorldBlacklisted(WorldUtil.getWorldOrServerName())) return original;
 
 		CONFIG.skyColorAddition = CONFIG.skyColorAddition.lerp(CONFIG.skyColorAdditions.getOrDefault(
 				BiomeFogClient.currentBiome,
