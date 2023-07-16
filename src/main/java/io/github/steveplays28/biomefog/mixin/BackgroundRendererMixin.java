@@ -13,7 +13,7 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.tag.BiomeTags;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
