@@ -13,10 +13,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 
+import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_LOADER_CONFIG_FOLDER_PATH;
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_PATH;
 
 public class BiomeFogConfigLoader {
-	public static final Path CONFIG_FOLDER_PATH = Path.of(MessageFormat.format("config/{0}/", MOD_PATH));
+	public static final Path CONFIG_FOLDER_PATH = MOD_LOADER_CONFIG_FOLDER_PATH.resolve(MOD_PATH);
 
 	public static void load() {
 		createConfigurationFoldersIfNeeded();
