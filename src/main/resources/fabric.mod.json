@@ -30,6 +30,9 @@
   "entrypoints": {
     "client": [
       "io.github.steveplays28.biomefog.client.BiomeFogClient"
+    ],
+    "modmenu": [
+      "io.github.steveplays28.biomefog.compat.modmenu.ModMenuEntrypoint"
     ]
   },
   "mixins": [
@@ -44,7 +47,8 @@
     "clear-skies": "*"
   },
   "suggests": {
-    "sodium": "*"
+    "sodium": "*",
+    "modmenu": ">=4.2.0"
   },
   "accessWidener": "biome-fog.accesswidener"
 }

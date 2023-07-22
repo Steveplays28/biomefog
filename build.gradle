@@ -23,6 +23,11 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -33,6 +38,9 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Mod Menu
+    modImplementation "com.terraformersmc:modmenu:${this.modmenu_version}"
 }
 
 processResources {

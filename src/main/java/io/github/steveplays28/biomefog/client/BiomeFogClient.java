@@ -19,7 +19,7 @@ import java.nio.file.Path;
 public class BiomeFogClient implements ClientModInitializer {
 	public static final String MOD_ID = "biome-fog";
 	public static final String MOD_PATH = "biome_fog";
-	public static final String MOD_COMMAND_ID = "biomefog";
+	public static final String NAMESPACE = "biomefog";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final Path MOD_LOADER_CONFIG_FOLDER_PATH = FabricLoader.getInstance().getConfigDir();
 
