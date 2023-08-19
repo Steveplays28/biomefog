@@ -9,8 +9,11 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.nio.file.Path;
 
 @Environment(EnvType.CLIENT)
 public class BiomeFogClient implements ClientModInitializer {
@@ -18,6 +21,7 @@ public class BiomeFogClient implements ClientModInitializer {
 	public static final String MOD_PATH = "biome_fog";
 	public static final String MOD_COMMAND_ID = "biomefog";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	public static final Path MOD_LOADER_CONFIG_FOLDER_PATH = FabricLoader.getInstance().getConfigDir();
 
 	public static String currentBiome = "";
 	public static String currentDimension = "";
