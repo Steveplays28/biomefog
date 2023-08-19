@@ -13,13 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 
+import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_LOADER_CONFIG_FOLDER_PATH;
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_PATH;
 
 public class BiomeFogConfigLoader {
-	public static final Path CONFIG_FOLDER_PATH = Path.of(MessageFormat.format("config/{0}/", MOD_PATH));
+	public static final Path CONFIG_FOLDER_PATH = MOD_LOADER_CONFIG_FOLDER_PATH.resolve(MOD_PATH);
 
 	public static void load() {
-		createConfigurationFoldersIfNeeded();
+		createMissingConfigurationFolders();
 		migrateOldConfigurationFile();
 
 		var configurationFilePaths = BiomeFogConfigurationFilePaths.class.getFields();
@@ -74,10 +75,10 @@ public class BiomeFogConfigLoader {
 		}
 	}
 
-	private static void createConfigurationFoldersIfNeeded() {
+	private static void createMissingConfigurationFolders() {
 		try {
-			if (!new File("/config").exists()) {
-				Files.createDirectory(Path.of("/config"));
+			if (!MOD_LOADER_CONFIG_FOLDER_PATH.toFile().exists()) {
+				Files.createDirectory(MOD_LOADER_CONFIG_FOLDER_PATH);
 			}
 
 			if (!CONFIG_FOLDER_PATH.toFile().exists()) {
@@ -98,14 +99,6 @@ public class BiomeFogConfigLoader {
 	}
 
 	private static void createMissingConfigurationFiles() {
-		if (!new File("/config").exists()) {
-			BiomeFogClient.LOGGER.error(
-					"Unable to create Biome Fog configuration files at {}. Configuration folder (/config) doesn't exist. Loading default configuration.",
-					CONFIG_FOLDER_PATH
-			);
-			return;
-		}
-
 		var configurationFilePaths = BiomeFogConfigurationFilePaths.class.getFields();
 		var defaultConfigurations = BiomeFogDefaultConfigurations.class.getFields();
 
