@@ -125,7 +125,7 @@ public abstract class BackgroundRendererMixin {
 				fogEnd = viewDistance;
 			}
 
-			var currentBiome = player.world.getBiome(player.getBlockPos());
+			var currentBiome = player.getWorld().getBiome(player.getBlockPos());
 			if (currentBiome.isIn(BiomeTags.HAS_CLOSER_WATER_FOG)) {
 				fogEnd *= 0.85f;
 			}
