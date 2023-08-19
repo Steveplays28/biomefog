@@ -8,10 +8,16 @@ import io.github.steveplays28.biomefog.config.gui.widget.TextWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.option.FloatOptionWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.NAMESPACE;
 
@@ -19,8 +25,13 @@ import static io.github.steveplays28.biomefog.client.BiomeFogClient.NAMESPACE;
 public class BiomeFogConfigScreen extends Screen {
 	public static final int WHITE_COLOR = 16777215;
 	public static final Text TITLE = Text.translatable("biomefog.screen.config.title");
+	public static final int BAR_HEIGHT = 40;
+	public static final int OPTION_HEIGHT = 20;
+	public static final int OPTION_SPACING = 10;
 
 	public final Screen parent;
+
+	private final List<TextFieldWidget> textFieldWidgets = new ArrayList<>();
 
 	public BiomeFogConfigScreen(Screen parent) {
 		super(TITLE);
@@ -32,15 +43,17 @@ public class BiomeFogConfigScreen extends Screen {
 		super.init();
 		if (client == null) return;
 
-		var barHeight = 64;
+		client.keyboard.setRepeatEvents(true);
+
+		var optionSpacing = 10;
 
 		// Top
-		addDrawable(new BackgroundWidget(0, 0, width, barHeight, 0));
+		addDrawable(new BackgroundWidget(0, 0, width, BAR_HEIGHT, 0));
 		addDrawable(new TextWidget(width / 2, 8, textRenderer, TITLE, WHITE_COLOR, true));
 
 		// Bottom
-		addDrawable(new BackgroundWidget(0, height - barHeight, width, barHeight, 0));
-		addDrawableChild(new ButtonWidget(width / 2 - 160 / 2, height - barHeight / 2 - 20 / 2, 160, 20,
+		addDrawable(new BackgroundWidget(0, height - BAR_HEIGHT, width, BAR_HEIGHT, 0));
+		addDrawableChild(new ButtonWidget(width / 2 - 160 / 2, height - BAR_HEIGHT / 2 - 20 / 2, 160, 20,
 				Text.translatable("biomefog.screen.config.cancel"), widget -> {
 			BiomeFogConfigLoader.save();
 			close();
@@ -49,9 +62,11 @@ public class BiomeFogConfigScreen extends Screen {
 
 		// Middle
 		var middleWidth = client.world == null ? width : width / 2;
-		addDrawable(new BackgroundWidget(0, barHeight, middleWidth, height - barHeight * 2, 0, 0.5f, 0.5f, 0.5f));
+		addDrawable(new BackgroundWidget(0, BAR_HEIGHT, middleWidth, height - BAR_HEIGHT * 2, 0, 0.5f, 0.5f, 0.5f));
 
 		var configurations = BiomeFogConfigLoader.BiomeFogConfigurations.class.getFields();
+		var optionPositionX = width / 2;
+		var optionPositionY = BAR_HEIGHT + optionSpacing;
 
 		for (int i = 0; i < configurations.length; i++) {
 			try {
@@ -60,13 +75,25 @@ public class BiomeFogConfigScreen extends Screen {
 
 				for (int j = 0; j < configOptions.length; j++) {
 					var option = configOptions[j].get(config);
-					addOptionWidgetByType(option);
+					optionPositionY = addOptionWidgetByType(option, optionPositionX, optionPositionY);
 				}
 			} catch (IllegalAccessException e) {
 				BiomeFogClient.LOGGER.info("Failed to create {} config screen, see stacktrace below:", NAMESPACE);
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	protected void clearAndInit() {
+		textFieldWidgets.clear();
+		super.clearAndInit();
+	}
+
+	@Override
+	protected void clearChildren() {
+		textFieldWidgets.clear();
+		super.clearChildren();
 	}
 
 	@Override
@@ -81,11 +108,47 @@ public class BiomeFogConfigScreen extends Screen {
 		client.setScreen(parent);
 	}
 
-	private void addOptionWidgetByType(Object option) {
+	@Override
+	public void resize(MinecraftClient client, int width, int height) {
+		clearAndInit();
+		super.resize(client, width, height);
+	}
+
+	@Override
+	public void tick() {
+//		textFieldWidgets.forEach(TextFieldWidget::tick);
+	}
+
+	/**
+	 * @param option
+	 * @param positionX
+	 * @param positionY
+	 * @return The Y position of the next option widget in the list.
+	 */
+	private int addOptionWidgetByType(Object option, int positionX, int positionY) {
+		var couldCast = false;
+
 		if (option instanceof Float castedOption) {
-			addDrawableChild(
-					new FloatOptionWidget(width / 2, height / 2, 160, 20, textRenderer, Text.literal(castedOption.toString()), true));
-			BiomeFogClient.LOGGER.info(castedOption.toString());
+			var floatOptionWidget = new FloatOptionWidget(
+					positionX, positionY, 160, OPTION_HEIGHT, textRenderer, Text.literal(castedOption.toString()), true);
+			floatOptionWidget.setEditable(true);
+			floatOptionWidget.setText(castedOption.toString());
+			floatOptionWidget.setChangedListener(s -> {
+				BiomeFogClient.LOGGER.info(s);
+			});
+			addDrawableChild(floatOptionWidget);
+//			addSelectableChild(floatOptionWidget);
+			textFieldWidgets.add(floatOptionWidget);
+			BiomeFogClient.LOGGER.info(
+					MessageFormat.format("castedOption: {0} size: {1}", castedOption.toString(), textFieldWidgets.size()));
+
+			couldCast = true;
+		}
+
+		if (couldCast) {
+			return positionY + OPTION_HEIGHT + OPTION_SPACING;
+		} else {
+			return positionY;
 		}
 	}
 }
