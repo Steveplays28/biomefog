@@ -10,4 +10,14 @@ public class MathUtil {
 	public static float clamp(float min, float max, float value) {
 		return MathHelper.clamp(value, min, max);
 	}
+
+	public static int clamp(int value, int min, int max) {
+		if (value < min) {
+			value = min;
+		} else if (value > max) {
+			value = max;
+		}
+
+		return value;
+	}
 }
