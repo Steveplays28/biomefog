@@ -1,6 +1,5 @@
 package io.github.steveplays28.biomefog.config.gui.widget;
 
-import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
 public class SelectableCustomWidget extends CustomWidget {
@@ -25,7 +24,7 @@ public class SelectableCustomWidget extends CustomWidget {
 		return false;
 	}
 
-	public void mouseClickedSuccessfully(double mouseX, double mouseY) { }
+	public void mouseClickedSuccessfully(double mouseX, double mouseY) {}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
@@ -37,7 +36,7 @@ public class SelectableCustomWidget extends CustomWidget {
 		return false;
 	}
 
-	public void mouseReleasedSuccessfully(double mouseX, double mouseY) { }
+	public void mouseReleasedSuccessfully(double mouseX, double mouseY) {}
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
