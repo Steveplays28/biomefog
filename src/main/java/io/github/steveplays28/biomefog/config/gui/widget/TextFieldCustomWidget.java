@@ -10,9 +10,10 @@ import org.lwjgl.glfw.GLFW;
 
 public class TextFieldCustomWidget extends SelectableCustomWidget {
 	protected static final int BORDER_RADIUS = 1;
-	protected static final int CARET_WIDTH = 5;
+	protected static final int CARET_WIDTH = 2;
+	protected static final float CARET_HEIGHT_PERCENTAGE = 2f / 3f;
 	// Background colors
-	protected static final int NORMAL_BACKGROUND_COLOR = -new Color(100, 100, 100).toInt();
+	protected static final int NORMAL_BACKGROUND_COLOR = -new Color(250, 250, 250).toInt();
 	// Border colors
 	protected static final int NORMAL_BORDER_COLOR = -new Color(160, 160, 160).toInt();
 	// White color
@@ -59,15 +60,17 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 			caretCharWidth = caretCharWidthTotal + caretCharPositionX;
 		}
 
-		// Render the background, BORDER_RADIUS pixels in so there's room for the border
-		fill(matrices, positionX - width / 2 - BORDER_RADIUS, positionY - height / 2 - BORDER_RADIUS, positionX + width / 2 + BORDER_RADIUS,
-				positionY + height / 2 + BORDER_RADIUS, backgroundColor
-		);
 		// Render the border
-		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, borderColor);
+		fill(matrices, positionX - width / 2 - BORDER_RADIUS, positionY - height / 2 - BORDER_RADIUS, positionX + width / 2 + BORDER_RADIUS,
+				positionY + height / 2 + BORDER_RADIUS, borderColor
+		);
+		// Render the background
+		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, backgroundColor);
 		// Render the caret
-		fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth, positionY - height / 2,
-				positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH, positionY + height / 2, backgroundColor
+		fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth,
+				(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
+				positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH,
+				(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
 		);
 		// Render the text inside the text field widget
 		drawCenteredTextWithShadow(matrices, textRenderer, Text.of(text.toString()).asOrderedText(), positionX + BORDER_RADIUS,
@@ -79,33 +82,34 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	public void mouseClickedSuccessfully(double mouseX, double mouseY) {
 		if (!isEnabled) return;
 
-		backgroundColor = HIGHLIGHT_BORDER_COLOR;
+		borderColor = HIGHLIGHT_BORDER_COLOR;
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		if (!isEnabled) return false;
 
-		backgroundColor = NORMAL_BACKGROUND_COLOR;
+		borderColor = NORMAL_BORDER_COLOR;
 		return true;
 	}
 
 	@Override
 	public void disable() {
 		super.disable();
-		backgroundColor = DISABLED_BORDER_COLOR;
+		borderColor = DISABLED_BORDER_COLOR;
 	}
 
 	@Override
 	public void enable() {
 		super.enable();
-		backgroundColor = NORMAL_BACKGROUND_COLOR;
+		borderColor = NORMAL_BORDER_COLOR;
 	}
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
 		// TODO: Limit size of text and add an ellipsis
-		text.append(chr);
+		text.insert(getCaretPosition(), chr);
+		addToCaretPosition(1);
 		return true;
 	}
 
@@ -165,8 +169,17 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 					return false;
 				}
 
-				text.deleteCharAt(getCaretPosition() - 1);
-				addToCaretPosition(-1);
+				if (Screen.hasControlDown()) {
+					var wordSkipPosition = getWordSkipPosition(true);
+					var caretPositionToAdd = wordSkipPosition - getCaretPosition();
+
+					text.delete(getWordSkipPosition(true), getCaretPosition());
+					addToCaretPosition(caretPositionToAdd);
+				} else {
+					text.deleteCharAt(getCaretPosition() - 1);
+					addToCaretPosition(-1);
+				}
+
 				return true;
 			}
 			case GLFW.GLFW_KEY_DELETE -> {
@@ -175,7 +188,12 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 					return false;
 				}
 
-				text.deleteCharAt(getCaretPosition());
+				if (Screen.hasControlDown()) {
+					text.delete(getCaretPosition(), getWordSkipPosition(false));
+				} else {
+					text.deleteCharAt(getCaretPosition());
+				}
+
 				return true;
 			}
 			case GLFW.GLFW_KEY_HOME -> {
@@ -216,16 +234,24 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void setCaretPositionToEnd() {
-		setCaretPosition(text.length() + 1);
+		setCaretPosition(text.length());
 	}
 
-	protected int getWordSkipPosition(Boolean previous) {
-		var wordSkipPosition = previous ? text.lastIndexOf(" ", getCaretPosition()) : text.indexOf(" ", getCaretPosition());
+	protected int getWordSkipPosition(Boolean searchBackwards) {
+		var wordSkipPosition = searchBackwards ? text.lastIndexOf(" ", getCaretPosition()) : text.indexOf(" ", getCaretPosition());
+		if (wordSkipPosition == getCaretPosition()) {
+			wordSkipPosition = searchBackwards ? text.lastIndexOf(" ", getCaretPosition() - 1) : text.indexOf(" ", getCaretPosition() + 1);
+		}
 
 		if (wordSkipPosition == -1) {
-			return -1;
+			// Skip to the start/end of the text field
+			if (searchBackwards) {
+				return 0;
+			} else {
+				return text.length();
+			}
 		} else {
-			return wordSkipPosition - 1;
+			return wordSkipPosition;
 		}
 	}
 
