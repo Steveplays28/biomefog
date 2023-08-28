@@ -49,15 +49,8 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 		// TODO: Refactor into method
 		var textWidth = textRenderer.getWidth(text.toString());
-		var currentCharPositionX = textRenderer.getWidth(
-				text.substring(0, getCaretPosition() < text.length() ? getCaretPosition() : text.length() - 1));
-		int currentCharWidth = 0;
-		if (text.length() != 0) {
-			currentCharWidth = textRenderer.getWidth(text.substring(
-					currentCharPositionX,
-					getCaretPosition() - 1 <= text.length() ? getCaretPosition() - 1 : text.length() - 1
-			));
-		}
+		var currentCharPositionX = getCharPositionX(getCaretPosition() >= text.length() ? text.length() - 1 : getCaretPosition());
+		int currentCharWidth = getCharWidthTotal(getCaretPosition() >= text.length() ? text.length() - 1 : getCaretPosition());
 
 		// Render the background, BORDER_RADIUS pixels in so there's room for the border
 		fill(matrices, positionX - width / 2 - BORDER_RADIUS, positionY - height / 2 - BORDER_RADIUS, positionX + width / 2 + BORDER_RADIUS,
@@ -67,7 +60,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, borderColor);
 		// Render the caret
 		fill(matrices, positionX - textWidth / 2 + currentCharPositionX, positionY - height / 2,
-				positionX - textWidth / 2 + currentCharPositionX + currentCharWidth, positionY + height / 2, backgroundColor
+				positionX - textWidth / 2 + currentCharWidth, positionY + height / 2, backgroundColor
 		);
 		// Render the text inside the text field widget
 		drawCenteredTextWithShadow(matrices, textRenderer, Text.of(text.toString()).asOrderedText(), positionX + BORDER_RADIUS,
@@ -259,5 +252,13 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 	protected String getSelectedText() {
 		return text.substring(getSelectionStartPosition(), getSelectionEndPosition());
+	}
+
+	protected int getCharPositionX(int charIndex) {
+		return textRenderer.getWidth(text.substring(0, charIndex));
+	}
+
+	protected int getCharWidthTotal(int charIndex) {
+		return getCharPositionX(charIndex) + textRenderer.getWidth(String.valueOf(text.charAt(charIndex)));
 	}
 }
