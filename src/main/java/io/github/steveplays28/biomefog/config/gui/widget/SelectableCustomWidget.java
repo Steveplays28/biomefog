@@ -14,33 +14,38 @@ public class SelectableCustomWidget extends CustomWidget {
 		this.height = height;
 	}
 
+	public SelectableCustomWidget(int positionX, int positionY, int width, int height, Boolean isFocused, CustomWidget... childWidgets) {
+		super(positionX, positionY, childWidgets);
+		this.width = width;
+		this.height = height;
+		this.isFocused = isFocused;
+	}
+
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (button == GLFW.GLFW_MOUSE_BUTTON_1) {
+		if (isMouseOver(mouseX, mouseY) && button == GLFW.GLFW_MOUSE_BUTTON_1) {
 			mouseClickedSuccessfully(mouseX, mouseY);
-			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void mouseClickedSuccessfully(double mouseX, double mouseY) {}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		if (button == GLFW.GLFW_MOUSE_BUTTON_1) {
+		if (isMouseOver(mouseX, mouseY) && button == GLFW.GLFW_MOUSE_BUTTON_1) {
 			mouseReleasedSuccessfully(mouseX, mouseY);
-			return true;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void mouseReleasedSuccessfully(double mouseX, double mouseY) {}
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= (double) this.positionX && mouseX < (double) (this.positionX + this.width) && mouseY >= (double) this.positionY && mouseY < (double) (this.positionY + this.height);
+		return mouseX >= positionX - (double) width / 2 && mouseX < positionX + (double) width / 2 && mouseY >= positionY - (double) height / 2 && mouseY < positionY + (double) height / 2;
 	}
 
 	public Boolean isEnabled() {

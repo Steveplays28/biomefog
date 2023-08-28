@@ -75,6 +75,8 @@ public class BiomeFogConfigScreen extends CustomScreen {
 					var optionWidget = addOptionWidgetByType(option, optionPositionX, optionPositionY);
 					if (optionWidget != null) {
 						optionPositionY = getNextOptionWidgetPositionY(optionPositionY);
+
+						return;
 					}
 				}
 			} catch (IllegalAccessException e) {
@@ -120,7 +122,7 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 		if (option instanceof Float floatOption) {
 			// TODO: Introduce variables for width and height of text field widgets instead of using the screen width/height
-			customWidget = new TextFieldCustomWidget(positionX, positionY, width, height, floatOption.toString(), textRenderer);
+			customWidget = new TextFieldCustomWidget(positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption.toString(), textRenderer);
 		}
 
 //		if (option instanceof Map<?, ?> mapOption) {

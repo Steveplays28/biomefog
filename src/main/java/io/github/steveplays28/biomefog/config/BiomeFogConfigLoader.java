@@ -31,13 +31,9 @@ public class BiomeFogConfigLoader {
 
 			try (InputStream stream = Files.newInputStream((Path) configurationFilePaths[i].get(Path.class))) {
 				var gson = createGson();
-				BiomeFogClient.LOGGER.info(configurations[i]);
-				configurations[i].set(
-						BiomeFogConfigurations.class,
-						gson.fromJson(
-								new JsonReader(new BufferedReader(new InputStreamReader(stream))),
-								configurations[i].getType()
-						)
+
+				configurations[i].set(BiomeFogConfigurations.class,
+						gson.fromJson(new JsonReader(new BufferedReader(new InputStreamReader(stream))), configurations[i].getType())
 				);
 			} catch (IOException | IllegalAccessException e) {
 				BiomeFogClient.LOGGER.error(
@@ -61,8 +57,7 @@ public class BiomeFogConfigLoader {
 				writer.write(json);
 
 			} catch (IOException | IllegalAccessException e) {
-				BiomeFogClient.LOGGER.error(
-						"Unable to save Biome Fog configuration files at {}. See stack trace below:",
+				BiomeFogClient.LOGGER.error("Unable to save Biome Fog configuration files at {}. See stack trace below:",
 						CONFIG_FOLDER_PATH
 				);
 				e.printStackTrace();
@@ -151,8 +146,7 @@ public class BiomeFogConfigLoader {
 
 	@SuppressWarnings("unused")
 	public static class BiomeFogConfigurationFilePaths {
-		public static final Path CONFIG_FILE_PATH = Path.of(
-				MessageFormat.format("{0}/{1}.json", CONFIG_FOLDER_PATH, MOD_PATH));
+		public static final Path CONFIG_FILE_PATH = Path.of(MessageFormat.format("{0}/{1}.json", CONFIG_FOLDER_PATH, MOD_PATH));
 		public static final Path BLACKLISTED_WORLDS_FILE_PATH = Path.of(
 				MessageFormat.format("{0}/{1}_blacklisted_worlds.json", CONFIG_FOLDER_PATH, MOD_PATH));
 	}
