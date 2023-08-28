@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class TextFieldCustomWidget extends SelectableCustomWidget {
 	protected static final int BORDER_RADIUS = 1;
+	protected static final int CARET_WIDTH = 5;
 	// Background colors
 	protected static final int NORMAL_BACKGROUND_COLOR = -new Color(100, 100, 100).toInt();
 	// Border colors
@@ -47,10 +48,16 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		super.render(matrices, mouseX, mouseY, delta);
 
-		// TODO: Refactor into method
 		var textWidth = textRenderer.getWidth(text.toString());
-		var currentCharPositionX = getCharPositionX(getCaretPosition() >= text.length() ? text.length() - 1 : getCaretPosition());
-		int currentCharWidth = getCharWidthTotal(getCaretPosition() >= text.length() ? text.length() - 1 : getCaretPosition());
+		var caretCharPositionX = getCharPositionX(getCaretPosition() - 1);
+		var caretCharWidthTotal = getCharWidthTotal(getCaretPosition() - 1);
+		var caretCharWidth = caretCharWidthTotal - caretCharPositionX;
+
+		// Place caret on the left of the leftmost character if needed
+		if (getCaretPosition() <= 0) {
+			caretCharPositionX = -caretCharPositionX;
+			caretCharWidth = caretCharWidthTotal + caretCharPositionX;
+		}
 
 		// Render the background, BORDER_RADIUS pixels in so there's room for the border
 		fill(matrices, positionX - width / 2 - BORDER_RADIUS, positionY - height / 2 - BORDER_RADIUS, positionX + width / 2 + BORDER_RADIUS,
@@ -59,8 +66,8 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		// Render the border
 		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, borderColor);
 		// Render the caret
-		fill(matrices, positionX - textWidth / 2 + currentCharPositionX, positionY - height / 2,
-				positionX - textWidth / 2 + currentCharWidth, positionY + height / 2, backgroundColor
+		fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth, positionY - height / 2,
+				positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH, positionY + height / 2, backgroundColor
 		);
 		// Render the text inside the text field widget
 		drawCenteredTextWithShadow(matrices, textRenderer, Text.of(text.toString()).asOrderedText(), positionX + BORDER_RADIUS,
@@ -255,10 +262,30 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected int getCharPositionX(int charIndex) {
+		if (text.length() <= 0) {
+			return 0;
+		}
+		if (charIndex < 0) {
+			charIndex = 1;
+		}
+		if (charIndex >= text.length()) {
+			return text.length() - 1;
+		}
+
 		return textRenderer.getWidth(text.substring(0, charIndex));
 	}
 
 	protected int getCharWidthTotal(int charIndex) {
+		if (text.length() <= 0) {
+			return 0;
+		}
+		if (charIndex < 0) {
+			charIndex = 1;
+		}
+		if (charIndex >= text.length()) {
+			return text.length() - 1;
+		}
+
 		return getCharPositionX(charIndex) + textRenderer.getWidth(String.valueOf(text.charAt(charIndex)));
 	}
 }
