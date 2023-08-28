@@ -49,10 +49,14 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 		// TODO: Refactor into method
 		var textWidth = textRenderer.getWidth(text.toString());
-		var currentCharPositionX = textRenderer.getWidth(text.substring(0, getCaretPosition() < text.length() ? getCaretPosition() : text.length() - 1));
+		var currentCharPositionX = textRenderer.getWidth(
+				text.substring(0, getCaretPosition() < text.length() ? getCaretPosition() : text.length() - 1));
 		int currentCharWidth = 0;
 		if (text.length() != 0) {
-			currentCharWidth = textRenderer.getWidth(text.substring(currentCharPositionX, getCaretPosition() - 1 <= text.length() ? getCaretPosition() - 1 : text.length() - 1));
+			currentCharWidth = textRenderer.getWidth(text.substring(
+					currentCharPositionX,
+					getCaretPosition() - 1 <= text.length() ? getCaretPosition() - 1 : text.length() - 1
+			));
 		}
 
 		// Render the background, BORDER_RADIUS pixels in so there's room for the border

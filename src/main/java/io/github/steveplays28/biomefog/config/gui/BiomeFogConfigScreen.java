@@ -122,7 +122,8 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 		if (option instanceof Float floatOption) {
 			// TODO: Introduce variables for width and height of text field widgets instead of using the screen width/height
-			customWidget = new TextFieldCustomWidget(positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption.toString(), textRenderer);
+			customWidget = new TextFieldCustomWidget(
+					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption.toString(), textRenderer);
 		}
 
 //		if (option instanceof Map<?, ?> mapOption) {
