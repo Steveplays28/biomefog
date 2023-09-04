@@ -9,6 +9,8 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,12 +20,12 @@ import java.util.List;
 public class CustomWidget extends DrawableHelper implements Drawable, Element, Selectable {
 	protected int positionX;
 	protected int positionY;
-	protected List<CustomWidget> childWidgets;
+	protected List<CustomWidget> childWidgets = new ArrayList<>();
 
 	public CustomWidget(int positionX, int positionY, CustomWidget... childWidgets) {
 		this.positionX = positionX;
 		this.positionY = positionY;
-		this.childWidgets = List.of(childWidgets);
+		this.childWidgets.addAll(Arrays.asList(childWidgets));
 	}
 
 	@Override

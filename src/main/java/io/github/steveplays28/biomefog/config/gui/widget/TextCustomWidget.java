@@ -3,23 +3,18 @@ package io.github.steveplays28.biomefog.config.gui.widget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
-public class TextWidget extends DrawableHelper implements Drawable {
-	public final int positionX;
-	public final int positionY;
+public class TextCustomWidget extends CustomWidget {
 	private final TextRenderer textRenderer;
 	private final Text text;
 	private final int color;
 	private final boolean centerTextHorizontally;
 
-	public TextWidget(int positionX, int positionY, TextRenderer textRenderer, Text text, int color, boolean centerTextHorizontally) {
-		this.positionX = positionX;
-		this.positionY = positionY;
+	public TextCustomWidget(int positionX, int positionY, Text text, int color, Boolean centerTextHorizontally, TextRenderer textRenderer, CustomWidget... childWidgets) {
+		super(positionX, positionY, childWidgets);
 		this.textRenderer = textRenderer;
 		this.text = text;
 		this.color = color;

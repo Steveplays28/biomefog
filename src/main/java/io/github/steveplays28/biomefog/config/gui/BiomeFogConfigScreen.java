@@ -6,8 +6,8 @@ import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.config.gui.screen.CustomScreen;
 import io.github.steveplays28.biomefog.config.gui.widget.BackgroundWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
-import io.github.steveplays28.biomefog.config.gui.widget.TextFieldCustomWidget;
-import io.github.steveplays28.biomefog.config.gui.widget.TextWidget;
+import io.github.steveplays28.biomefog.config.gui.widget.TextCustomWidget;
+import io.github.steveplays28.biomefog.config.gui.widget.option.FloatOptionCustomWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
@@ -43,11 +43,11 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 		client.keyboard.setRepeatEvents(true);
 
-		var optionSpacing = 10;
+		var optionSpacing = 20;
 
 		// Top
 		addDrawable(new BackgroundWidget(0, 0, width, BAR_HEIGHT, 0));
-		addDrawable(new TextWidget(width / 2, 8, textRenderer, TITLE, WHITE_COLOR, true));
+		addDrawable(new TextCustomWidget(width / 2, 8, TITLE, WHITE_COLOR, true, textRenderer));
 
 		// Bottom
 		addDrawable(new BackgroundWidget(0, height - BAR_HEIGHT, width, BAR_HEIGHT, 0));
@@ -107,24 +107,9 @@ public class BiomeFogConfigScreen extends CustomScreen {
 	public @Nullable CustomWidget addOptionWidgetByType(Object option, int positionX, int positionY) {
 		CustomWidget customWidget = null;
 
-//		if (option instanceof Float castedOption) {
-//			var floatOptionWidget = new FloatOptionWidget(
-//					positionX, positionY, 160, OPTION_HEIGHT, textRenderer, Text.literal(castedOption.toString()), true);
-//			floatOptionWidget.setEditable(true);
-//			floatOptionWidget.setText(castedOption.toString());
-//			floatOptionWidget.setChangedListener(s -> {
-//				BiomeFogClient.LOGGER.info(s);
-//			});
-//			addDrawableChild(floatOptionWidget);
-//			textFieldWidgets.add(floatOptionWidget);
-//			BiomeFogClient.LOGGER.info(
-//					MessageFormat.format("castedOption: {0} size: {1}", castedOption.toString(), textFieldWidgets.size()));
-//		}
-
 		if (option instanceof Float floatOption) {
-			// TODO: Introduce variables for width and height of text field widgets instead of using the screen width/height
-			customWidget = new TextFieldCustomWidget(
-					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption.toString(), textRenderer);
+			customWidget = new FloatOptionCustomWidget(
+					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption, Text.translatable("biomefog.screen.config.floatoptioncustomwidget"), textRenderer);
 		}
 
 //		if (option instanceof Map<?, ?> mapOption) {
