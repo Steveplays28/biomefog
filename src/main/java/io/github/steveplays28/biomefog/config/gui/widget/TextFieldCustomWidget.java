@@ -51,12 +51,6 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		super.render(matrices, mouseX, mouseY, delta);
 
 		var textWidth = textRenderer.getWidth(text.toString());
-		var lastCharIndex = text.length() - 1;
-		if (lastCharIndex < 0) {
-			lastCharIndex = 0;
-		}
-		var lastCharWidth = textRenderer.getWidth(text.substring(lastCharIndex, text.length()));
-
 		var caretCharPositionX = getCharPositionX(getCaretPosition() - 1);
 		var caretCharWidthTotal = getCharWidthTotal(getCaretPosition() - 1);
 		var caretCharWidth = caretCharWidthTotal - caretCharPositionX;
@@ -79,6 +73,12 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 		// Render the selection indicator if there's a selection
 		if (hasSelection()) {
+			var lastSelectedCharIndex = getSelectionEndPosition();
+			if (lastSelectedCharIndex < 0) {
+				lastSelectedCharIndex = 0;
+			}
+			var lastCharWidth = textRenderer.getWidth(Character.toString(text.charAt(lastSelectedCharIndex)));
+
 			fill(matrices, positionX - textWidth / 2 + selectionStartPositionX, (int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
 					positionX - textWidth / 2 + selectionEndPositionX + lastCharWidth,
 					(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
@@ -145,6 +145,10 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
 		// TODO: Limit size of text and add an ellipsis
+		if (hasSelection()) {
+			deleteSelection();
+		}
+
 		text.insert(getCaretPosition(), chr);
 		addToCaretPosition(1);
 		return true;
@@ -168,23 +172,32 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		}
 		if (Screen.isPaste(keyCode)) {
 			if (hasSelection()) {
-				text.setLength(0);
+				deleteSelection();
 			}
 
-			text.append(MinecraftClient.getInstance().keyboard.getClipboard());
+			text.insert(getSelectionEndPosition(), MinecraftClient.getInstance().keyboard.getClipboard());
+			setCaretPosition(getSelectionEndPosition());
 			return true;
 		}
 		if (Screen.isCut(keyCode)) {
 			if (hasSelection()) {
-				text.setLength(0);
+				MinecraftClient.getInstance().keyboard.setClipboard(getSelectedText());
+
+				deleteSelection();
+				setCaretPositionToEnd();
 			}
 
-			MinecraftClient.getInstance().keyboard.setClipboard(getSelectedText());
 			return true;
 		}
 
 		switch (keyCode) {
 			case GLFW.GLFW_KEY_LEFT -> {
+				if (Screen.hasShiftDown()) {
+					if (!hasSelection()) {
+						setSelectionStartPosition(getCaretPosition());
+					}
+				}
+
 				if (Screen.hasControlDown()) {
 					setCaretPosition(getWordSkipPosition(true));
 
@@ -207,6 +220,12 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 				return true;
 			}
 			case GLFW.GLFW_KEY_RIGHT -> {
+				if (Screen.hasShiftDown()) {
+					if (!hasSelection()) {
+						setSelectionStartPosition(getCaretPosition());
+					}
+				}
+
 				if (Screen.hasControlDown()) {
 					setCaretPosition(getWordSkipPosition(false));
 
@@ -221,7 +240,11 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 							addToCaretPosition(1);
 						}
 
-						setSelectionEndPosition(getCaretPosition());
+						var caretPosition = getCaretPosition() - 1;
+						if (caretPosition < 0) {
+							caretPosition = 0;
+						}
+						setSelectionEndPosition(caretPosition);
 					} else {
 						clearSelection();
 					}
@@ -231,6 +254,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 			case GLFW.GLFW_KEY_BACKSPACE -> {
 				if (hasSelection()) {
 					deleteSelection();
+					return true;
 				}
 
 				// TODO: Refactor into method
@@ -254,6 +278,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 			case GLFW.GLFW_KEY_DELETE -> {
 				if (hasSelection()) {
 					deleteSelection();
+					return true;
 				}
 
 				// TODO: Refactor into method
@@ -334,7 +359,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void setSelectionStartPosition(int position) {
-		if (position < 0) {
+		if (position < -1) {
 			return;
 		}
 
@@ -346,7 +371,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void setSelectionEndPosition(int position) {
-		if (position < 0) {
+		if (position < -1) {
 			return;
 		}
 
@@ -354,7 +379,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected Boolean hasSelection() {
-		return getSelectionEndPosition() > 0;
+		return getSelectionStartPosition() >= 0 && getSelectionEndPosition() >= 0;
 	}
 
 	protected String getSelectedText() {
@@ -362,14 +387,21 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void clearSelection() {
-		setSelectionStartPosition(0);
-		setSelectionEndPosition(0);
+		setSelectionStartPosition(-1);
+		setSelectionEndPosition(-1);
 	}
 
 	protected void deleteSelection() {
-		text.delete(getSelectionStartPosition(), getSelectionEndPosition());
+		var caretEndPosition = getSelectionEndPosition() - (getSelectionEndPosition() - getSelectionStartPosition());
+
+		if (getSelectionEndPosition() - getSelectionStartPosition() == 0) {
+			text.deleteCharAt(getSelectionEndPosition());
+		} else {
+			text.delete(getSelectionStartPosition(), getCaretPosition());
+		}
+
 		clearSelection();
-		setCaretPositionToEnd();
+		setCaretPosition(caretEndPosition);
 	}
 
 	protected int getCharPositionX(int charIndex) {
