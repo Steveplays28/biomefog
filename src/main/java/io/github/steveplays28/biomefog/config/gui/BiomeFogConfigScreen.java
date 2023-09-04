@@ -22,6 +22,7 @@ import java.util.List;
 
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.NAMESPACE;
 
+// TODO: Disable exiting the screen using the escape key when a text field is being edited and has a selection
 @Environment(EnvType.CLIENT)
 public class BiomeFogConfigScreen extends CustomScreen {
 	public static final Text TITLE = Text.translatable("biomefog.screen.config.title");

@@ -6,6 +6,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
 public class TextFieldCustomWidget extends SelectableCustomWidget {
@@ -39,17 +40,23 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		this.text = new StringBuilder(text);
 		this.textRenderer = textRenderer;
 		setCaretPositionToEnd();
-		this.selectionStartPosition = 0;
-		this.selectionEndPosition = 0;
+		clearSelection();
 	}
 
 	// TODO: Reimplement Minecraft's TextFieldWidget, also a good time to add validation and add type checking (generics?)
+	// TODO: Set cursor to text selection cursor on hover
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		super.render(matrices, mouseX, mouseY, delta);
 
 		var textWidth = textRenderer.getWidth(text.toString());
+		var lastCharIndex = text.length() - 1;
+		if (lastCharIndex < 0) {
+			lastCharIndex = 0;
+		}
+		var lastCharWidth = textRenderer.getWidth(text.substring(lastCharIndex, text.length()));
+
 		var caretCharPositionX = getCharPositionX(getCaretPosition() - 1);
 		var caretCharWidthTotal = getCharWidthTotal(getCaretPosition() - 1);
 		var caretCharWidth = caretCharWidthTotal - caretCharPositionX;
@@ -60,18 +67,31 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 			caretCharWidth = caretCharWidthTotal + caretCharPositionX;
 		}
 
+		var selectionStartPositionX = getCharPositionX(getSelectionStartPosition());
+		var selectionEndPositionX = getCharPositionX(getSelectionEndPosition());
+
 		// Render the border
 		fill(matrices, positionX - width / 2 - BORDER_RADIUS, positionY - height / 2 - BORDER_RADIUS, positionX + width / 2 + BORDER_RADIUS,
 				positionY + height / 2 + BORDER_RADIUS, borderColor
 		);
 		// Render the background
 		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, backgroundColor);
-		// Render the caret
-		fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth,
-				(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
-				positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH,
-				(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
-		);
+
+		// Render the selection indicator if there's a selection
+		if (hasSelection()) {
+			fill(matrices, positionX - textWidth / 2 + selectionStartPositionX, (int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
+					positionX - textWidth / 2 + selectionEndPositionX + lastCharWidth,
+					(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
+			);
+		} else {
+			// Render the caret if there's no selection
+			fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth,
+					(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
+					positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH,
+					(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
+			);
+		}
+
 		// Render the text inside the text field widget
 		drawCenteredTextWithShadow(matrices, textRenderer, Text.of(text.toString()).asOrderedText(), positionX + BORDER_RADIUS,
 				positionY - textRenderer.fontHeight / 2 + BORDER_RADIUS, textColor
@@ -83,6 +103,23 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		if (!isEnabled) return;
 
 		borderColor = HIGHLIGHT_BORDER_COLOR;
+
+		int distanceBetweenMouseAndCaretX = MathHelper.floor(mouseX) - getCaretPosition();
+		int caretPositionPlusDistance = getCaretPosition() + distanceBetweenMouseAndCaretX;
+		if (caretPositionPlusDistance >= text.length()) {
+			caretPositionPlusDistance = text.length() - 1;
+		}
+		if (caretPositionPlusDistance <= 0) {
+			caretPositionPlusDistance = 0;
+		}
+		var caretPosition = getCaretPosition();
+		if (caretPositionPlusDistance > caretPosition) {
+			caretPosition = caretPositionPlusDistance;
+			caretPositionPlusDistance = getCaretPosition();
+		}
+		var textWidthBetweenMouseAndCaret = textRenderer.getWidth(text.substring(caretPositionPlusDistance, caretPosition));
+
+		setCaretPosition(getCaretPosition() - textWidthBetweenMouseAndCaret);
 	}
 
 	@Override
@@ -122,7 +159,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		if (Screen.isSelectAll(keyCode)) {
 			setCaretPositionToEnd();
 			setSelectionStartPosition(0);
-			setSelectionEndPosition(text.length());
+			setSelectionEndPosition(text.length() - 1);
 			return true;
 		}
 		if (Screen.isCopy(keyCode) && hasSelection()) {
@@ -150,20 +187,52 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 			case GLFW.GLFW_KEY_LEFT -> {
 				if (Screen.hasControlDown()) {
 					setCaretPosition(getWordSkipPosition(true));
+
+					if (Screen.hasShiftDown()) {
+						setSelectionEndPosition(getWordSkipPosition(true));
+					}
 				} else {
 					addToCaretPosition(-1);
+
+					if (Screen.hasShiftDown()) {
+						if (getCaretPosition() < 0) {
+							return false;
+						}
+
+						setSelectionEndPosition(getCaretPosition());
+					} else {
+						clearSelection();
+					}
 				}
 				return true;
 			}
 			case GLFW.GLFW_KEY_RIGHT -> {
 				if (Screen.hasControlDown()) {
 					setCaretPosition(getWordSkipPosition(false));
+
+					if (Screen.hasShiftDown()) {
+						setSelectionEndPosition(getWordSkipPosition(false));
+					}
 				} else {
 					addToCaretPosition(1);
+
+					if (Screen.hasShiftDown()) {
+						if (getCaretPosition() < 0) {
+							addToCaretPosition(1);
+						}
+
+						setSelectionEndPosition(getCaretPosition());
+					} else {
+						clearSelection();
+					}
 				}
 				return true;
 			}
 			case GLFW.GLFW_KEY_BACKSPACE -> {
+				if (hasSelection()) {
+					deleteSelection();
+				}
+
 				// TODO: Refactor into method
 				if (getCaretPosition() < 1 || getCaretPosition() > text.length()) {
 					return false;
@@ -183,6 +252,10 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 				return true;
 			}
 			case GLFW.GLFW_KEY_DELETE -> {
+				if (hasSelection()) {
+					deleteSelection();
+				}
+
 				// TODO: Refactor into method
 				if (getCaretPosition() >= text.length()) {
 					return false;
@@ -204,6 +277,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 				setCaretPositionToEnd();
 				return true;
 			}
+			case GLFW.GLFW_KEY_ESCAPE -> clearSelection();
 		}
 
 		return false;
@@ -260,7 +334,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void setSelectionStartPosition(int position) {
-		if (position < 0 && position != -1) {
+		if (position < 0) {
 			return;
 		}
 
@@ -272,7 +346,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected void setSelectionEndPosition(int position) {
-		if (position < 0 && position != -1) {
+		if (position < 0) {
 			return;
 		}
 
@@ -280,11 +354,22 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	}
 
 	protected Boolean hasSelection() {
-		return getSelectionStartPosition() == -1 && getSelectionEndPosition() == -1;
+		return getSelectionEndPosition() > 0;
 	}
 
 	protected String getSelectedText() {
 		return text.substring(getSelectionStartPosition(), getSelectionEndPosition());
+	}
+
+	protected void clearSelection() {
+		setSelectionStartPosition(0);
+		setSelectionEndPosition(0);
+	}
+
+	protected void deleteSelection() {
+		text.delete(getSelectionStartPosition(), getSelectionEndPosition());
+		clearSelection();
+		setCaretPositionToEnd();
 	}
 
 	protected int getCharPositionX(int charIndex) {
