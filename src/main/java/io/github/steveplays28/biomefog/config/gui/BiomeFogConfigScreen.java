@@ -109,7 +109,9 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 		if (option instanceof Float floatOption) {
 			customWidget = new FloatOptionCustomWidget(
-					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption, Text.translatable("biomefog.screen.config.floatoptioncustomwidget"), textRenderer);
+					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption,
+					Text.translatable("biomefog.screen.config.floatoptioncustomwidget"), textRenderer
+			);
 		}
 
 //		if (option instanceof Map<?, ?> mapOption) {
