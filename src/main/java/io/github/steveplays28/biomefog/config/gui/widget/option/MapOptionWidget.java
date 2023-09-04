@@ -16,8 +16,9 @@ public class MapOptionWidget<K, V> extends CustomWidget {
 		// TODO: Add dropdown widget that encapsulates all entry widgets
 
 		for (Map.Entry<K, V> entry : map.entrySet()) {
-			var keyWidget = configScreen.addOptionWidgetByType(entry.getKey(), positionX - 160, positionY);
-			var valueWidget = configScreen.addOptionWidgetByType(entry.getKey(), positionX + entryHorizontalSpacing + 160, positionY);
+			var keyWidget = configScreen.addOptionWidgetByType(entry.getKey(), entry.getKey().toString(), positionX - 160, positionY);
+			var valueWidget = configScreen.addOptionWidgetByType(
+					entry.getValue(), entry.getKey().toString(), positionX + entryHorizontalSpacing + 160, positionY);
 
 //			childWidgets.add(keyWidget);
 //			childWidgets.add(valueWidget);

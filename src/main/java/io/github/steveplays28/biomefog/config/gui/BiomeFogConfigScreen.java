@@ -73,7 +73,7 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 				for (Field configOption : configOptions) {
 					var option = configOption.get(config);
-					var optionWidget = addOptionWidgetByType(option, optionPositionX, optionPositionY);
+					var optionWidget = addOptionWidgetByType(option, configOption.getName(), optionPositionX, optionPositionY);
 					if (optionWidget != null) {
 						optionPositionY = getNextOptionWidgetPositionY(optionPositionY);
 
@@ -104,13 +104,13 @@ public class BiomeFogConfigScreen extends CustomScreen {
 	 * @param positionX The X position of the widget.
 	 * @param positionY The Y position of the widget.
 	 */
-	public @Nullable CustomWidget addOptionWidgetByType(Object option, int positionX, int positionY) {
+	public @Nullable CustomWidget addOptionWidgetByType(Object option, String optionName, int positionX, int positionY) {
 		CustomWidget customWidget = null;
 
 		if (option instanceof Float floatOption) {
 			customWidget = new FloatOptionCustomWidget(
 					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption,
-					Text.translatable("biomefog.screen.config.floatoptioncustomwidget"), textRenderer
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
 			);
 		}
 
