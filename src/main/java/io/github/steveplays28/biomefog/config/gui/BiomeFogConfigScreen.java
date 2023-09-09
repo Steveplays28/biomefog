@@ -7,18 +7,23 @@ import io.github.steveplays28.biomefog.config.gui.screen.CustomScreen;
 import io.github.steveplays28.biomefog.config.gui.widget.BackgroundWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.TextCustomWidget;
-import io.github.steveplays28.biomefog.config.gui.widget.option.FloatOptionCustomWidget;
+import io.github.steveplays28.biomefog.config.gui.widget.option.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vec3i;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.NAMESPACE;
 
@@ -34,6 +39,72 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 	public BiomeFogConfigScreen(Screen parent) {
 		super(TITLE, parent);
+	}
+
+	/**
+	 * @param option    The value that should be displayed in the widget.
+	 * @param positionX The X position of the widget.
+	 * @param positionY The Y position of the widget.
+	 */
+	public static @NotNull CustomWidget getOptionCustomWidget(Object option, String optionName, int positionX, int positionY, int width, int height, TextRenderer textRenderer) {
+		CustomWidget customWidget = null;
+
+		if (option instanceof Float floatOption) {
+			customWidget = new FloatOptionCustomWidget(positionX, positionY, width - 50, height, floatOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			);
+		}
+
+		if (option instanceof String stringOption) {
+			customWidget = new StringOptionCustomWidget(positionX, positionY, width, height, stringOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			);
+		}
+
+		if (option instanceof Vec3d vec3dOption) {
+			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3dOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			);
+		}
+
+		if (option instanceof Vec3f vec3fOption) {
+			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3fOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			);
+		}
+
+		if (option instanceof Vec3i vec3iOption) {
+			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3iOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			);
+		}
+
+		if (option instanceof Map<?, ?> mapOption) {
+			customWidget = new MapOptionCustomWidget<>(mapOption, positionX, positionY, width, height, textRenderer);
+		}
+
+		if (option instanceof List<?> listOption) {
+			customWidget = new ListOptionCustomWidget<>(listOption, positionX, positionY, width, height, textRenderer);
+		}
+
+		if (customWidget == null) {
+			throw new UnsupportedOperationException(
+					String.format("Custom option widget couldn't be created for option of type %s", option.getClass().getName()));
+		}
+
+		return customWidget;
+	}
+
+	@Override
+	protected void clearAndInit() {
+		textFieldWidgets.clear();
+		super.clearAndInit();
+	}
+
+	@Override
+	protected void clearChildren() {
+		textFieldWidgets.clear();
+		super.clearChildren();
 	}
 
 	@Override
@@ -73,12 +144,12 @@ public class BiomeFogConfigScreen extends CustomScreen {
 
 				for (Field configOption : configOptions) {
 					var option = configOption.get(config);
-					var optionWidget = addOptionWidgetByType(option, configOption.getName(), optionPositionX, optionPositionY);
-					if (optionWidget != null) {
-						optionPositionY = getNextOptionWidgetPositionY(optionPositionY);
+					var optionWidget = getOptionCustomWidget(option, configOption.getName(), optionPositionX, optionPositionY, width,
+							textRenderer.fontHeight * 2, textRenderer
+					);
 
-						return;
-					}
+					addDrawableChild(optionWidget);
+					optionPositionY = getNextOptionWidgetPositionY(optionWidget, optionPositionY);
 				}
 			} catch (IllegalAccessException e) {
 				BiomeFogClient.LOGGER.info("Failed to create {} config screen, see stacktrace below:", NAMESPACE);
@@ -87,45 +158,7 @@ public class BiomeFogConfigScreen extends CustomScreen {
 		}
 	}
 
-	@Override
-	protected void clearAndInit() {
-		textFieldWidgets.clear();
-		super.clearAndInit();
-	}
-
-	@Override
-	protected void clearChildren() {
-		textFieldWidgets.clear();
-		super.clearChildren();
-	}
-
-	/**
-	 * @param option    The value that should be displayed in the widget.
-	 * @param positionX The X position of the widget.
-	 * @param positionY The Y position of the widget.
-	 */
-	public @Nullable CustomWidget addOptionWidgetByType(Object option, String optionName, int positionX, int positionY) {
-		CustomWidget customWidget = null;
-
-		if (option instanceof Float floatOption) {
-			customWidget = new FloatOptionCustomWidget(
-					positionX, positionY, width - 50, textRenderer.fontHeight * 2, floatOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
-			);
-		}
-
-//		if (option instanceof Map<?, ?> mapOption) {
-//			customWidget = new MapOptionWidget<>(mapOption, positionX, positionY, this);
-//		}
-
-		if (customWidget != null) {
-			addDrawableChild(customWidget);
-		}
-
-		return customWidget;
-	}
-
-	public int getNextOptionWidgetPositionY(int positionY) {
-		return positionY + OPTION_HEIGHT + OPTION_SPACING;
+	public int getNextOptionWidgetPositionY(@NotNull CustomWidget optionWidget, int positionY) {
+		return positionY + optionWidget.getActualHeight() + OPTION_SPACING;
 	}
 }

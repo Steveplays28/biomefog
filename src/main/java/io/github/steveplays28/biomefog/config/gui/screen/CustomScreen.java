@@ -1,6 +1,5 @@
 package io.github.steveplays28.biomefog.config.gui.screen;
 
-import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -25,11 +24,11 @@ public class CustomScreen extends Screen {
 
 	@Override
 	protected <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
-		if (drawableElement instanceof CustomWidget widget) {
-			for (var childWidget : widget.getChildWidgets()) {
-				addDrawableChild(childWidget);
-			}
-		}
+//		if (drawableElement instanceof CustomWidget widget) {
+//			for (var childWidget : widget.getChildWidgets()) {
+//				addDrawableChild(childWidget);
+//			}
+//		}
 
 		return super.addDrawableChild(drawableElement);
 	}

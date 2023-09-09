@@ -49,4 +49,11 @@ public class CustomWidget extends DrawableHelper implements Drawable, Element, S
 	public List<CustomWidget> getChildWidgets() {
 		return childWidgets;
 	}
+
+	/**
+	 * @return The actual height of the widget, useful for dynamic widgets that can have changing heights, but still want proper spacing when rendering.
+	 */
+	public int getActualHeight() {
+		return 0;
+	}
 }
