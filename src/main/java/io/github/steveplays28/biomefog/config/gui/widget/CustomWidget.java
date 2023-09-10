@@ -46,6 +46,78 @@ public class CustomWidget extends DrawableHelper implements Drawable, Element, S
 		// TODO: Implement narrations
 	}
 
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		var mouseClicked = false;
+
+		for (var childWidget : getChildWidgets()) {
+			if (childWidget.mouseClicked(mouseX, mouseY, button)) {
+				mouseClicked = true;
+			}
+		}
+
+		return mouseClicked;
+	}
+
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		var mouseReleased = false;
+
+		for (var childWidget : getChildWidgets()) {
+			if (childWidget.mouseReleased(mouseX, mouseY, button)) {
+				mouseReleased = true;
+			}
+		}
+
+		return mouseReleased;
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		var mouseScrolled = false;
+
+		for (var childWidget : getChildWidgets()) {
+			if (childWidget.mouseScrolled(mouseX, mouseY, amount)) {
+				mouseScrolled = true;
+			}
+		}
+
+		return mouseScrolled;
+	}
+
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY) {
+		var isMouseOver = false;
+
+		for (var childWidget : getChildWidgets()) {
+			if (childWidget.isMouseOver(mouseX, mouseY)) {
+				isMouseOver = true;
+			}
+		}
+
+		return isMouseOver;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		// TODO: Add a focused field to CustomWidget
+		for (var childWidget : getChildWidgets()) {
+			childWidget.keyPressed(keyCode, scanCode, modifiers);
+		}
+
+		return Element.super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		// TODO: Add a focused field to CustomWidget
+		for (var childWidget : getChildWidgets()) {
+			childWidget.charTyped(chr, modifiers);
+		}
+
+		return Element.super.charTyped(chr, modifiers);
+	}
+
 	public List<CustomWidget> getChildWidgets() {
 		return childWidgets;
 	}
@@ -54,6 +126,12 @@ public class CustomWidget extends DrawableHelper implements Drawable, Element, S
 	 * @return The actual height of the widget, useful for dynamic widgets that can have changing heights, but still want proper spacing when rendering.
 	 */
 	public int getActualHeight() {
-		return 0;
+		var actualHeight = 0;
+
+		for (var childWidget : getChildWidgets()) {
+			actualHeight += childWidget.getActualHeight();
+		}
+
+		return actualHeight;
 	}
 }

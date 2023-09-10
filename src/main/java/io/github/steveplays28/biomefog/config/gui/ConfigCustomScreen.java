@@ -13,7 +13,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -21,24 +20,25 @@ import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.steveplays28.biomefog.client.BiomeFogClient.NAMESPACE;
+import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_NAMESPACE;
 
 // TODO: Disable exiting the screen using the escape key when a text field is being edited and has a selection
 @Environment(EnvType.CLIENT)
-public class BiomeFogConfigScreen extends CustomScreen {
-	public static final Text TITLE = Text.translatable("biomefog.screen.config.title");
+public class ConfigCustomScreen extends CustomScreen {
+	public static final String TITLE_FORMAT = "%s.screen.config.title";
 	public static final int BAR_HEIGHT = 40;
-	public static final int OPTION_HEIGHT = 20;
 	public static final int OPTION_SPACING = 10;
 
-	private final List<TextFieldWidget> textFieldWidgets = new ArrayList<>();
+	public final String MOD_ID;
+	public final Text TITLE;
 
-	public BiomeFogConfigScreen(Screen parent) {
-		super(TITLE, parent);
+	public ConfigCustomScreen(Screen parent, String modId) {
+		super(Text.translatable(String.format(TITLE_FORMAT, modId)), parent);
+		this.MOD_ID = modId;
+		this.TITLE = Text.translatable(String.format(TITLE_FORMAT, modId));
 	}
 
 	/**
@@ -80,31 +80,23 @@ public class BiomeFogConfigScreen extends CustomScreen {
 		}
 
 		if (option instanceof Map<?, ?> mapOption) {
-			customWidget = new MapOptionCustomWidget<>(mapOption, positionX, positionY, width, height, textRenderer);
+			customWidget = new MapOptionCustomWidget<>(mapOption, Text.translatable(String.format("biomefog.screen.config.%s", optionName)),
+					positionX, positionY, width, height, textRenderer
+			);
 		}
 
 		if (option instanceof List<?> listOption) {
-			customWidget = new ListOptionCustomWidget<>(listOption, positionX, positionY, width, height, textRenderer);
+			customWidget = new ListOptionCustomWidget<>(listOption, optionName, positionX, positionY, width, height, textRenderer);
 		}
 
 		if (customWidget == null) {
 			throw new UnsupportedOperationException(
-					String.format("Custom option widget couldn't be created for option of type %s", option.getClass().getName()));
+					String.format("Custom option widget couldn't be created for option of type %s (%s)", option.getClass().getName(),
+							optionName
+					));
 		}
 
 		return customWidget;
-	}
-
-	@Override
-	protected void clearAndInit() {
-		textFieldWidgets.clear();
-		super.clearAndInit();
-	}
-
-	@Override
-	protected void clearChildren() {
-		textFieldWidgets.clear();
-		super.clearChildren();
 	}
 
 	@Override
@@ -152,10 +144,15 @@ public class BiomeFogConfigScreen extends CustomScreen {
 					optionPositionY = getNextOptionWidgetPositionY(optionWidget, optionPositionY);
 				}
 			} catch (IllegalAccessException e) {
-				BiomeFogClient.LOGGER.info("Failed to create {} config screen, see stacktrace below:", NAMESPACE);
+				BiomeFogClient.LOGGER.info("Failed to create {} config screen, see stacktrace below:", MOD_NAMESPACE);
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public Text getTitle() {
+		return TITLE;
 	}
 
 	public int getNextOptionWidgetPositionY(@NotNull CustomWidget optionWidget, int positionY) {

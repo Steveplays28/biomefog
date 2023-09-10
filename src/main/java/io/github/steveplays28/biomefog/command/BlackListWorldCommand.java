@@ -15,7 +15,7 @@ public class BlackListWorldCommand {
 	public static final String NAME = "worldblacklist";
 
 	public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-		var command = literal(BiomeFogClient.NAMESPACE).then(literal(NAME)
+		var command = literal(BiomeFogClient.MOD_NAMESPACE).then(literal(NAME)
 				.then(literal("add").executes(BlackListWorldCommand::add))
 				.then(literal("remove").executes(BlackListWorldCommand::remove)));
 

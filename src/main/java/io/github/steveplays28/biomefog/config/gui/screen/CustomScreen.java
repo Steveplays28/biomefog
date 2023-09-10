@@ -1,11 +1,9 @@
 package io.github.steveplays28.biomefog.config.gui.screen;
 
+import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
@@ -23,21 +21,22 @@ public class CustomScreen extends Screen {
 	}
 
 	@Override
-	protected <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
-//		if (drawableElement instanceof CustomWidget widget) {
-//			for (var childWidget : widget.getChildWidgets()) {
-//				addDrawableChild(childWidget);
-//			}
-//		}
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		for (Element element : this.children()) {
+			element.mouseClicked(mouseX, mouseY, button);
 
-		return super.addDrawableChild(drawableElement);
-	}
+			if (element instanceof CustomWidget customWidget) {
+				if (customWidget.isMouseOver(mouseX, mouseY)) {
+					this.setFocused(customWidget);
 
-	@Override
-	public void resize(MinecraftClient client, int width, int height) {
-		// Fixes issues with the positions and sizes of widgets not updating
-		clearAndInit();
-		super.resize(client, width, height);
+					if (button == 0) {
+						this.setDragging(true);
+					}
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override

@@ -45,6 +45,7 @@ public class SelectableCustomWidget extends CustomWidget {
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
+		// The pivot point of selectable custom widgets is in the center
 		return mouseX >= positionX - (double) width / 2 && mouseX < positionX + (double) width / 2 && mouseY >= positionY - (double) height / 2 && mouseY < positionY + (double) height / 2;
 	}
 
