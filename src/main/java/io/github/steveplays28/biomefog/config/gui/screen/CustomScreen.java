@@ -71,6 +71,23 @@ public class CustomScreen extends Screen {
 	}
 
 	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		var mouseScrolled = false;
+
+		for (var childElement : children()) {
+			if (childElement.mouseScrolled(mouseX, mouseY, amount)) {
+				mouseScrolled = true;
+			}
+		}
+
+		if (!mouseScrolled) {
+			mouseScrolled = super.mouseScrolled(mouseX, mouseY, amount);
+		}
+
+		return mouseScrolled;
+	}
+
+	@Override
 	public void setFocused(@Nullable Element focused) {
 		if (getFocused() instanceof SelectableCustomWidget focusedSelectableCustomWidget) {
 			focusedSelectableCustomWidget.setFocused(false);

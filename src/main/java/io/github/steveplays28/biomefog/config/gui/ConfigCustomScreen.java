@@ -6,6 +6,7 @@ import io.github.steveplays28.biomefog.config.BiomeFogConfigLoader;
 import io.github.steveplays28.biomefog.config.gui.screen.CustomScreen;
 import io.github.steveplays28.biomefog.config.gui.widget.BackgroundWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
+import io.github.steveplays28.biomefog.config.gui.widget.ScrollContainerCustomWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.TextCustomWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.option.*;
 import net.fabricmc.api.EnvType;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +130,7 @@ public class ConfigCustomScreen extends CustomScreen {
 		var configurations = BiomeFogConfigLoader.BiomeFogConfigurations.class.getFields();
 		var optionPositionX = width / 2;
 		var optionPositionY = BAR_HEIGHT + optionSpacing;
+		var scrollContainerChildWidgets = new ArrayList<CustomWidget>();
 
 		for (Field configuration : configurations) {
 			try {
@@ -140,7 +143,7 @@ public class ConfigCustomScreen extends CustomScreen {
 							textRenderer.fontHeight * 2, textRenderer
 					);
 
-					addDrawableChild(optionWidget);
+					scrollContainerChildWidgets.add(optionWidget);
 					optionPositionY = getNextOptionWidgetPositionY(optionWidget, optionPositionY);
 				}
 			} catch (IllegalAccessException e) {
@@ -148,6 +151,8 @@ public class ConfigCustomScreen extends CustomScreen {
 				e.printStackTrace();
 			}
 		}
+
+		addDrawableChild(new ScrollContainerCustomWidget(width / 2, height / 2, scrollContainerChildWidgets.toArray(new CustomWidget[0])));
 	}
 
 	@Override
