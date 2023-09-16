@@ -26,13 +26,9 @@ public class CustomScreen extends Screen {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		for (Element childElement : this.children()) {
-			childElement.mouseClicked(mouseX, mouseY, button);
-
 			if (childElement instanceof CustomWidget childCustomWidget) {
 				mouseClickedRecursive(childCustomWidget, mouseX, mouseY, button);
-			}
-
-			if (childElement.isMouseOver(mouseX, mouseY)) {
+			} else if (childElement.isMouseOver(mouseX, mouseY)) {
 				if (button == 0) {
 					this.setDragging(true);
 				}
@@ -45,9 +41,19 @@ public class CustomScreen extends Screen {
 	}
 
 	protected void mouseClickedRecursive(@NotNull CustomWidget customWidget, double mouseX, double mouseY, int button) {
-		for (CustomWidget childCustomWidget : customWidget.getChildWidgets()) {
-			childCustomWidget.mouseClicked(mouseX, mouseY, button);
+		if (customWidget.getChildWidgets().size() == 0) {
+			if (customWidget.isMouseOver(mouseX, mouseY)) {
+				setFocused(customWidget);
 
+				if (button == 0) {
+					setDragging(true);
+				}
+			}
+
+			customWidget.mouseClicked(mouseX, mouseY, button);
+		}
+
+		for (CustomWidget childCustomWidget : customWidget.getChildWidgets()) {
 			// TODO: Move to widget code so widgets can work in any screen
 			if (childCustomWidget instanceof SelectableCustomWidget selectableCustomChildWidget) {
 				if (selectableCustomChildWidget.isMouseOver(mouseX, mouseY)) {
@@ -59,6 +65,7 @@ public class CustomScreen extends Screen {
 				}
 			}
 
+			childCustomWidget.mouseClicked(mouseX, mouseY, button);
 			mouseClickedRecursive(childCustomWidget, mouseX, mouseY, button);
 		}
 	}
@@ -66,7 +73,7 @@ public class CustomScreen extends Screen {
 	@Override
 	public void setFocused(@Nullable Element focused) {
 		if (getFocused() instanceof SelectableCustomWidget focusedSelectableCustomWidget) {
-//			focusedSelectableCustomWidget.setFocused(false);
+			focusedSelectableCustomWidget.setFocused(false);
 		}
 
 		if (focused instanceof SelectableCustomWidget selectableCustomWidget) {
