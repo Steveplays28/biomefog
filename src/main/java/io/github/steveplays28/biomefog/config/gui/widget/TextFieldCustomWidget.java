@@ -72,24 +72,27 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		fill(matrices, positionX - width / 2, positionY - height / 2, positionX + width / 2, positionY + height / 2, backgroundColor);
 
 		// Render the selection indicator if there's a selection
-		if (hasSelection()) {
-			var lastSelectedCharIndex = getSelectionEndPosition();
-			if (lastSelectedCharIndex < 0) {
-				lastSelectedCharIndex = 0;
-			}
-			var lastCharWidth = textRenderer.getWidth(Character.toString(text.charAt(lastSelectedCharIndex)));
+		if (isFocused()) {
+			if (hasSelection()) {
+				var lastSelectedCharIndex = getSelectionEndPosition();
+				if (lastSelectedCharIndex < 0) {
+					lastSelectedCharIndex = 0;
+				}
+				var lastCharWidth = textRenderer.getWidth(Character.toString(text.charAt(lastSelectedCharIndex)));
 
-			fill(matrices, positionX - textWidth / 2 + selectionStartPositionX, (int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
-					positionX - textWidth / 2 + selectionEndPositionX + lastCharWidth,
-					(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
-			);
-		} else {
-			// Render the caret if there's no selection
-			fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth,
-					(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
-					positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH,
-					(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
-			);
+				fill(matrices, positionX - textWidth / 2 + selectionStartPositionX,
+						(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
+						positionX - textWidth / 2 + selectionEndPositionX + lastCharWidth,
+						(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
+				);
+			} else {
+				// Render the caret if there's no selection
+				fill(matrices, positionX - textWidth / 2 + caretCharPositionX + caretCharWidth,
+						(int) (positionY - height / 2 * CARET_HEIGHT_PERCENTAGE),
+						positionX - textWidth / 2 + caretCharPositionX + caretCharWidth + CARET_WIDTH,
+						(int) (positionY + height / 2 * CARET_HEIGHT_PERCENTAGE), borderColor
+				);
+			}
 		}
 
 		// Render the text inside the text field widget
@@ -100,7 +103,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 	@Override
 	public void mouseClickedSuccessfully(double mouseX, double mouseY) {
-		if (!isEnabled) return;
+		if (!isEnabled() || !isFocused()) return;
 
 		borderColor = HIGHLIGHT_BORDER_COLOR;
 
@@ -124,7 +127,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		if (!isEnabled) return false;
+		if (!isEnabled()) return false;
 
 		borderColor = NORMAL_BORDER_COLOR;
 		return true;
@@ -144,6 +147,10 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
+		if (!isEnabled() || !isFocused()) {
+			return false;
+		}
+
 		// TODO: Limit size of text and add an ellipsis
 		if (hasSelection()) {
 			deleteSelection();
@@ -156,7 +163,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		if (!isEnabled) {
+		if (!isEnabled() || !isFocused()) {
 			return false;
 		}
 

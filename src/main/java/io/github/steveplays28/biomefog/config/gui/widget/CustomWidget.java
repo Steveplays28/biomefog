@@ -100,7 +100,6 @@ public class CustomWidget extends DrawableHelper implements Drawable, Element, S
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		// TODO: Add a focused field to CustomWidget
 		for (var childWidget : getChildWidgets()) {
 			childWidget.keyPressed(keyCode, scanCode, modifiers);
 		}
@@ -109,8 +108,16 @@ public class CustomWidget extends DrawableHelper implements Drawable, Element, S
 	}
 
 	@Override
+	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+		for (var childWidget : getChildWidgets()) {
+			childWidget.keyReleased(keyCode, scanCode, modifiers);
+		}
+
+		return Element.super.keyReleased(keyCode, scanCode, modifiers);
+	}
+
+	@Override
 	public boolean charTyped(char chr, int modifiers) {
-		// TODO: Add a focused field to CustomWidget
 		for (var childWidget : getChildWidgets()) {
 			childWidget.charTyped(chr, modifiers);
 		}

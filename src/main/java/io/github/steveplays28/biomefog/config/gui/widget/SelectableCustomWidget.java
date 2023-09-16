@@ -34,6 +34,8 @@ public class SelectableCustomWidget extends CustomWidget {
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		if (!isFocused()) return false;
+
 		if (isMouseOver(mouseX, mouseY) && button == GLFW.GLFW_MOUSE_BUTTON_1) {
 			mouseReleasedSuccessfully(mouseX, mouseY);
 		}
@@ -49,6 +51,20 @@ public class SelectableCustomWidget extends CustomWidget {
 		return mouseX >= positionX - (double) width / 2 && mouseX < positionX + (double) width / 2 && mouseY >= positionY - (double) height / 2 && mouseY < positionY + (double) height / 2;
 	}
 
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (!isFocused()) return false;
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+		if (!isFocused()) return false;
+
+		return super.keyReleased(keyCode, scanCode, modifiers);
+	}
+
 	public Boolean isEnabled() {
 		return isEnabled;
 	}
@@ -59,5 +75,13 @@ public class SelectableCustomWidget extends CustomWidget {
 
 	public void enable() {
 		isEnabled = true;
+	}
+
+	public Boolean isFocused() {
+		return isFocused;
+	}
+
+	public void setFocused(Boolean isFocused) {
+		this.isFocused = isFocused;
 	}
 }

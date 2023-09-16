@@ -11,16 +11,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class MapOptionCustomWidget<K, V> extends CustomWidget {
-	public final int entryHorizontalSpacing;
-
 	protected final Map<K, V> map;
 	protected final TextRenderer textRenderer;
 
 	public MapOptionCustomWidget(@NotNull Map<K, V> map, Text mapName, int positionX, int positionY, int width, int height, TextRenderer textRenderer) {
 		super(positionX, positionY);
-		this.entryHorizontalSpacing = width / 4;
 		this.map = map;
 		this.textRenderer = textRenderer;
+
+		var horizontalPadding = width / 100;
 
 		// TODO: Add dropdown widget that encapsulates all entry widgets
 
@@ -28,11 +27,12 @@ public class MapOptionCustomWidget<K, V> extends CustomWidget {
 
 		var index = 1;
 		for (Map.Entry<K, V> entry : map.entrySet()) {
-			var keyWidget = new TextFieldCustomWidget(positionX - 160, positionY + textRenderer.fontHeight * 4 * index, width, height,
-					entry.getKey().toString(), textRenderer
+			var entryPositionY = positionY + textRenderer.fontHeight * 4 * index;
+			var keyWidget = new TextFieldCustomWidget(positionX - width / 2 + horizontalPadding, entryPositionY,
+					width / 2 - horizontalPadding * 2, height, entry.getKey().toString(), textRenderer
 			);
-			var valueWidget = new TextFieldCustomWidget(positionX + entryHorizontalSpacing + 160,
-					positionY + textRenderer.fontHeight * 4 * index, width, height, entry.getValue().toString(), textRenderer
+			var valueWidget = new TextFieldCustomWidget(positionX + width / 2 + horizontalPadding, entryPositionY,
+					width / 2 - horizontalPadding * 2, height, entry.getValue().toString(), textRenderer
 			);
 
 			childWidgets.add(keyWidget);
