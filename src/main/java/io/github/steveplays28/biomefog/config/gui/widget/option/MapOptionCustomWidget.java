@@ -19,7 +19,7 @@ public class MapOptionCustomWidget<K, V> extends CustomWidget {
 		this.map = map;
 		this.textRenderer = textRenderer;
 
-		var horizontalPadding = width / 100;
+		var horizontalPadding = width / 10;
 
 		// TODO: Add dropdown widget that encapsulates all entry widgets
 

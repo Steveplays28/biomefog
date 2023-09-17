@@ -1,7 +1,5 @@
 package io.github.steveplays28.biomefog.config.gui.widget;
 
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class ScrollContainerCustomWidget extends CustomWidget {
@@ -13,23 +11,25 @@ public class ScrollContainerCustomWidget extends CustomWidget {
 	}
 
 	@Override
-	public void render(@NotNull MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		matrices.push();
-		matrices.translate(0, contentPositionY, 0);
-
-		super.render(matrices, mouseX, mouseY, delta);
-
-		matrices.pop();
-	}
-
-	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		super.mouseScrolled(mouseX, mouseY, amount);
 
 		// Add the scroll amount to contentPositionY, multiplied by a sensitivity
 		// TODO: Allow configuring the sensitivity and inverted scrolling
-		contentPositionY = (int) Math.round(MathHelper.clamp(contentPositionY + amount * 10, -getActualHeight(), 0d));
+		positionY += amount * 10;
+
+		scrollRecursive(this, amount);
 
 		return true;
+	}
+
+	// TODO: Refactor into a method in CustomWidget
+	protected void scrollRecursive(@NotNull CustomWidget customWidget, double amount) {
+		if (customWidget.childWidgets.size() == 0) return;
+
+		for (var childWidget : customWidget.childWidgets) {
+			childWidget.positionY += amount * 10;
+			scrollRecursive(childWidget, amount);
+		}
 	}
 }
