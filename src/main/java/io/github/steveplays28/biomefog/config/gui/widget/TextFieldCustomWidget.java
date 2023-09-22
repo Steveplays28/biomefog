@@ -9,10 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.lang.reflect.Field;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class TextFieldCustomWidget extends SelectableCustomWidget {
 	protected static final int BORDER_RADIUS = 1;

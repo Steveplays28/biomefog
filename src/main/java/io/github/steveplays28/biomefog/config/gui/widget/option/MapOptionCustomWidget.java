@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.LOGGER;
 

@@ -1,6 +1,5 @@
 package io.github.steveplays28.biomefog.config.gui.widget.option;
 
-import io.github.steveplays28.biomefog.config.gui.ConfigCustomScreen;
 import io.github.steveplays28.biomefog.config.gui.widget.CustomWidget;
 import io.github.steveplays28.biomefog.config.gui.widget.TextFieldCustomWidget;
 import net.minecraft.client.font.TextRenderer;
