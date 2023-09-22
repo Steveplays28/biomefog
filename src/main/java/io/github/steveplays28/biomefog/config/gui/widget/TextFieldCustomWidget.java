@@ -9,6 +9,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Field;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public class TextFieldCustomWidget extends SelectableCustomWidget {
 	protected static final int BORDER_RADIUS = 1;
 	protected static final int CARET_WIDTH = 2;
@@ -23,6 +28,8 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	// Text colors
 	protected static final int NORMAL_TEXT_COLOR = new Color(255, 255, 255).toInt();
 
+	protected final Consumer<String> onTextChanged;
+
 	protected int backgroundColor;
 	protected int borderColor;
 	protected int textColor;
@@ -32,7 +39,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 	protected int selectionStartPosition;
 	protected int selectionEndPosition;
 
-	public TextFieldCustomWidget(int positionX, int positionY, int width, int height, String text, TextRenderer textRenderer, CustomWidget... childWidgets) {
+	public TextFieldCustomWidget(int positionX, int positionY, int width, int height, String text, TextRenderer textRenderer, Consumer<String> onTextChanged, CustomWidget... childWidgets) {
 		super(positionX, positionY, width, height, childWidgets);
 		this.backgroundColor = NORMAL_BACKGROUND_COLOR;
 		this.borderColor = NORMAL_BORDER_COLOR;
@@ -41,6 +48,7 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		this.textRenderer = textRenderer;
 		setCaretPositionToEnd();
 		clearSelection();
+		this.onTextChanged = onTextChanged;
 	}
 
 	// TODO: Reimplement Minecraft's TextFieldWidget, also a good time to add validation and add type checking (generics?)
@@ -158,6 +166,9 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 
 		text.insert(getCaretPosition(), chr);
 		addToCaretPosition(1);
+
+		onTextChanged.accept(text.toString());
+
 		return true;
 	}
 
@@ -315,6 +326,10 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		return false;
 	}
 
+	public StringBuilder getText() {
+		return text;
+	}
+
 	protected int getCaretPosition() {
 		return caretPosition;
 	}
@@ -406,6 +421,8 @@ public class TextFieldCustomWidget extends SelectableCustomWidget {
 		} else {
 			text.delete(getSelectionStartPosition(), getCaretPosition());
 		}
+
+		onTextChanged.accept(text.toString());
 
 		clearSelection();
 		setCaretPosition(caretEndPosition);

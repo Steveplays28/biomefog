@@ -26,6 +26,8 @@ public class CustomScreen extends Screen {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		for (Element childElement : this.children()) {
+			childElement.mouseClicked(mouseX, mouseY, button);
+
 			if (childElement instanceof CustomWidget childCustomWidget) {
 				mouseClickedRecursive(childCustomWidget, mouseX, mouseY, button);
 			} else if (childElement.isMouseOver(mouseX, mouseY)) {

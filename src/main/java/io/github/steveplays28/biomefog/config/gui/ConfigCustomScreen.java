@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static io.github.steveplays28.biomefog.client.BiomeFogClient.MOD_NAMESPACE;
 
@@ -48,47 +49,48 @@ public class ConfigCustomScreen extends CustomScreen {
 	 * @param positionX The X position of the widget.
 	 * @param positionY The Y position of the widget.
 	 */
-	public static @NotNull CustomWidget getOptionCustomWidget(Object option, String optionName, int positionX, int positionY, int width, int height, TextRenderer textRenderer) {
+	public static @NotNull CustomWidget getOptionCustomWidget(int positionX, int positionY, int width, int height, TextRenderer textRenderer, Object configClass, Object option, String optionName, Field configField) {
 		CustomWidget customWidget = null;
 
 		if (option instanceof Float floatOption) {
-			customWidget = new FloatOptionCustomWidget(positionX, positionY, width - 50, height, floatOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+			customWidget = new FloatOptionCustomWidget(positionX, positionY, width - 50, height, textRenderer, floatOption,
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), configClass, configField
 			);
 		}
 
 		if (option instanceof String stringOption) {
 			customWidget = new StringOptionCustomWidget(positionX, positionY, width, height, stringOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer, configClass, configField
 			);
 		}
 
 		if (option instanceof Vec3d vec3dOption) {
 			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3dOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer, configClass, configField
 			);
 		}
 
 		if (option instanceof Vec3f vec3fOption) {
 			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3fOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer, configClass, configField
 			);
 		}
 
 		if (option instanceof Vec3i vec3iOption) {
 			customWidget = new Vector3OptionCustomWidget(positionX, positionY, width, height, vec3iOption,
-					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer
+					Text.translatable(String.format("biomefog.screen.config.%s", optionName)), textRenderer, configClass, configField
 			);
 		}
 
 		if (option instanceof Map<?, ?> mapOption) {
 			customWidget = new MapOptionCustomWidget<>(mapOption, Text.translatable(String.format("biomefog.screen.config.%s", optionName)),
-					positionX, positionY, width, height, textRenderer
+					configField, positionX, positionY, width, height, configClass, textRenderer
 			);
 		}
 
 		if (option instanceof List<?> listOption) {
-			customWidget = new ListOptionCustomWidget<>(listOption, optionName, positionX, positionY, width, height, textRenderer);
+			customWidget = new ListOptionCustomWidget<>(
+					listOption, optionName, configClass, configField, positionX, positionY, width, height, textRenderer);
 		}
 
 		if (customWidget == null) {
@@ -117,7 +119,10 @@ public class ConfigCustomScreen extends CustomScreen {
 		// Bottom
 		addDrawable(new BackgroundWidget(0, height - BAR_HEIGHT, width, BAR_HEIGHT, 0));
 		addDrawableChild(new ButtonWidget(width / 2 - 160 / 2, height - BAR_HEIGHT / 2 - 20 / 2, 160, 20,
-				Text.translatable("biomefog.screen.config.cancel"), widget -> {
+				Text.translatable("biomefog.screen.config.cancel"), widget -> close()
+		));
+		addDrawableChild(new ButtonWidget(width / 2 + 160 / 2, height - BAR_HEIGHT / 2 - 20 / 2, 160, 20,
+				Text.translatable("biomefog.screen.config.done"), widget -> {
 			BiomeFogConfigLoader.save();
 			close();
 		}
@@ -139,8 +144,8 @@ public class ConfigCustomScreen extends CustomScreen {
 
 				for (Field configOption : configOptions) {
 					var option = configOption.get(config);
-					var optionWidget = getOptionCustomWidget(option, configOption.getName(), optionPositionX, optionPositionY, width,
-							textRenderer.fontHeight * 2, textRenderer
+					var optionWidget = getOptionCustomWidget(optionPositionX, optionPositionY, width, textRenderer.fontHeight * 2,
+							textRenderer, config, option, configOption.getName(), configOption
 					);
 
 					scrollContainerChildWidgets.add(optionWidget);
