@@ -2,9 +2,14 @@
 //file:noinspection GroovyAccessibility
 
 plugins {
-    id 'fabric-loom' version '1.1.4'
+    id 'fabric-loom' version '1.6.1'
     id 'maven-publish'
 }
+
+java{
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
+}   
 
 version = "${project.mod_version}+mc${project.supported_minecraft_version}"
 group = project.maven_group
